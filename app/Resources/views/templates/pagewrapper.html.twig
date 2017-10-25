@@ -1,0 +1,68 @@
+<div id="page-wrapper">
+    {% block title %}
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ action_title }}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    {% endblock %}
+    <!-- /.row -->
+    {% block toplinks %}
+        {{ include('templates/toplinks.html.twig') }}
+    {% endblock %}
+
+    {% block charts %}
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-8">
+            {% block areachart %}
+                {{ include('templates/areachart.html.twig') }}
+            {% endblock %}
+
+            {% block barchart %}
+                {{ include('templates/barchart.html.twig') }}
+            {% endblock %}
+
+            {% block timeline %}
+                {{ include('templates/timeline.html.twig') }}
+            {% endblock %}
+
+            {% block table %}
+                {{ include('templates/table.html.twig') }}
+            {% endblock %}
+
+        </div>
+        <!-- /.col-lg-8 -->
+        <div class="col-lg-4">
+
+            {% block notification %}
+                {{ include('templates/notification.html.twig') }}
+            {% endblock %}
+
+            {% block donutchart %}
+                {{ include('templates/donutchart.html.twig') }}
+            {% endblock %}
+
+            {% block chat %}
+                {{ include('templates/chat.html.twig') }}
+            {% endblock %}
+
+        </div>
+        <!-- /.col-lg-4 -->
+    </div>
+    <!-- /.row -->
+    {% endblock %}
+    <div class="row">
+        <div class="col-lg-8">
+
+            {% block otherstuff_lg8 %}
+            {% endblock %}
+        </div>
+    </div>
+    <div class="row">
+        {% block otherstuff_lg12 %}
+        {% endblock %}
+    </div>
+</div>
+<!-- /#page-wrapper -->

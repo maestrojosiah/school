@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block pagewrapper %}
+  {% if term and examCompany.companyName is defined %}
+    {% set action_title = "Exam Records - " ~ examCompany.companyName ~ " Term " ~ term %}
+  {% else %}
+    {% set action_title = "Exam Records - New"%}
+  {% endif %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+        {% block otherstuff_lg12 %}
+          {% set locationId = null %}
+		    <div class="panel panel-default">
+		        <div class="panel-heading">
+		            Record Exam Marks. | <strong>Choose Term</strong>
+					       <select class="form-inline" id="term">
+                      <option value="none" {% if term == "none" %} selected {% endif %}>Choose Term</option>
+	                    <option value="term_1" {% if term == 1 %} selected {% endif %}>Term 1</option>
+	                    <option value="term_2" {% if term == 2 %} selected {% endif %}>Term 2</option>
+	                    <option value="term_3" {% if term == 3 %} selected {% endif %}>Term 3</option>
+	                </select>
+	                | <strong>Exam company</strong>
+                 <select class="form-inline" id="examCompany">
+                      <option value="select_one" {% if examCompany == null %} selected {% endif %} disabled >Select Exam Company</option>
+                      {% for company in examCompanies %}
+                        <option value="{{ company.id }}" {% if examCompany != null and examCompany.id == company.id %} selected {% endif %}>{{ company.companyName }}</option>
+                      {% endfor %}
+                  </select>
+                  <a href="{{ path('add_company') }}" class="btn btn-default">Add Company</a>
+		        </div>
+ 				{# marks, company etc.. #}
+		        <div class="panel-body">
+                <div class="alert alert-info" id="alert">Marks are saved and edited automatically as you type. Keep on filling the records!</div>
+		            <div class="table-responsive">
+		                <table class="table table-hover" id="attendanceTable">
+		                    <thead>
+		                        <tr>
+		                            <th class="col-md-3">Name</th>
+		                            {% for subject in subjects %}
+		                            	<th class="col-md-1">{{ subject.subjectTitle }}</th>
+		                        	{% endfor %}
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                    	{% for student in students %}
+		                    		<tr>
+		                    			<td><span class="text-nowrap"><a href="{{ path('student_profile', { studentId: student.id } ) }}">{{ student }}</a></span></td>
+			                            {% for subject in subjects %}
+                                  {% set key = student.id ~ subject.id %}
+                                    {% if exam[key] is defined %}
+                                      {% set marks = exam[key].marks %}
+                                    {% else %}
+                                      {% set marks = null %}
+                                    {% endif %}
+			                            	<td><input style="max-width:50px;" type="text" class="form-input" id="subject_{{subject.id}}|student_{{student.id}}" value="{{ marks }}"></td>
+			                        	{% endfor %}
+		                    		</tr>
+		                    	{% endfor %}
+		                    </tbody>
+		                </table>
+		            </div>
+		        </div>
+
+		    </div>
+      {% if class != null and examCompany != null %}
+        <a href="{{ path('view_exams', {'classId': class.id, 'examCompanyId': examCompany.id, 'term': term }) }}" class="btn btn-info btn-lg btn-block">Exams Summary</a>
+      {% endif %}
+        <a id="redirect" href="{{ path('add_exam_page', {'classId': class.id, 'examCompanyId': 'new', 'term': 'none' }) }}"></a>
+        <hr />
+        {% endblock %}
+    {% endembed %}
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+      <script>
+        $(document).on('keyup', '[id^="subject"]', function(){
+          console.log('company:'+$('#examCompany').val());
+          if($('#examCompany').val() == null){
+            $(this).val('');
+            $('#examCompany').focus().addClass('text-danger');
+            $('#alert').removeClass('alert-info').addClass('alert-warning');
+            $('#alert').html("Please set the exam company before recording anything")
+          } else if ($('#term').val() == "none"){
+            $(this).val('');
+            $('#term').focus().addClass('text-danger');
+            $('#alert').removeClass('alert-info').addClass('alert-warning');
+            $('#alert').html("Please select the term for the exams before recording anything")
+          } else {
+            var category = jQuery(this).attr("id");
+            var splitFirst = category.split('|');
+            var subjectWithId = splitFirst[0];
+            var studentWithId = splitFirst[1];
+            var subject = subjectWithId.split('_');
+            var subject_id = subject[1];
+            var student = studentWithId.split('_');
+            var student_id = student[1] ;
+
+            var marks = $(this).val();
+            var term = $("#term").val();
+            var examCompany = $("#examCompany").val();
+            var thisClass = {{ class.id }};
+
+
+            // console.log('subject_id: ' + subject_id + ' student_id: ' + student_id);
+
+            $.ajax({
+                url:'{{ (path('record_exam_ajax')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "subject_id": subject_id,
+                    "student_id": student_id,
+                    "marks": marks,
+                    "term": term,
+                    "examCompany": examCompany,
+                    "class": thisClass,
+                },
+                async: true,
+                success: function (data)
+                {
+                  $('#alert').html("<strong> Student: </strong> " + data.student + "<strong> Subject: </strong> "+ data.subject + "<strong> Marks: </strong>" + data.marks + "<strong> Exam Company: </strong>" + data.examCompany + "<strong> Term {{term}} </strong>" );
+                },
+               error: function () {
+                  $('#alert').removeClass('alert-info').addClass('alert-warning');
+                  $('#alert').html("Something went wrong. Please call 0705285959 for assistance");
+              }
+            });
+          }
+
+        });
+      </script>
+
+      <script>
+        $(document).on('change', '#examCompany', function(){
+          var termVal = $('#term').val();
+          var split = termVal.split("_");
+          var term = split[1];
+          $('#redirect').attr('href', "/exam/create/{{ class.id }}/"+$(this).val()+"/"+ term );
+            location.href = $('#redirect').attr('href');
+            console.log('changed');
+            $('#redirect').trigger('click');
+        });
+      </script>
+
+      <script>
+        $(document).on('change', '#term', function(){
+          var termVal = $('#term').val();
+          var split = termVal.split("_");
+          var term = split[1];
+          $('#redirect').attr('href', "/exam/create/{{ class.id }}/"+$('#examCompany').val()+"/"+ term );
+            location.href = $('#redirect').attr('href');
+            console.log('changed');
+            $('#redirect').trigger('click');
+        });
+      </script>
+
+      {# onchange of exam company, clear all inputs #}
+
+
+{# add new to exam company selection #}
+{# targe link after select #}
+{% endblock %}
+

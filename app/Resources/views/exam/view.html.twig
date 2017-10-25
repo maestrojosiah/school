@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+
+    <!-- DataTables CSS -->
+    <link href="{{ asset('vendor/datatables-plugins/dataTables.bootstrap.css') }}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{{ asset('vendor/datatables-responsive/dataTables.responsive.css') }}" rel="stylesheet">
+
+{% endblock %}
+{% block pagewrapper %}
+  {% if term and examCompany.companyName is defined %}
+    {% set action_title = "Exam Summary - " ~ examCompany.companyName ~ " Term " ~ term %}
+  {% else %}
+    {% set action_title = "Exam Summary - New"%}
+  {% endif %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+
+        {% block charts %}
+           {{ include('exam/table.html.twig') }}        	
+         
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+{% block javascripts %}
+    <!-- DataTables JavaScript -->
+    <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+    });
+    </script>
+
+      <script>
+        $(document).on('change', '#examCompany', function(){
+          var termVal = $('#term').val();
+          var split = termVal.split("_");
+          var term = split[1];
+          $('#redirect').attr('href', "/exam/view/{{ class.id }}/"+$(this).val()+"/"+ term );
+            location.href = $('#redirect').attr('href');
+            console.log('changed');
+            $('#redirect').trigger('click');
+        });
+      </script>
+
+      <script>
+        $(document).on('change', '#term', function(){
+          var termVal = $('#term').val();
+          var split = termVal.split("_");
+          var term = split[1];
+          $('#redirect').attr('href', "/exam/view/{{ class.id }}/"+$('#examCompany').val()+"/"+ term );
+            location.href = $('#redirect').attr('href');
+            console.log('changed');
+            $('#redirect').trigger('click');
+        });
+      </script>
+
+
+{% endblock %}

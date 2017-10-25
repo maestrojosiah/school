@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block pagewrapper %}
+    {% set action_title = "Choose class" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+        {% block otherstuff_lg8 %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <div class="list-group row">
+                {% for class in app.user.classses %}
+                    <a href="{{ path('record_attendance', { 'class': class.id} ) }}" class="list-group-item list-group-item-action col-xs-9"> {{ class|upper }} </a><a href="{{ path('attendance_register', { 'classId': class.id, 'dateString': "now"|date("Y-m-d") } ) }}" class="col-xs-3 btn btn-circle btn-default"><i class="fa fa-eye"></i></a>
+                {% endfor %}  
+            </div>
+		{% endblock %}      
+    {% endembed %}
+{% endblock %}

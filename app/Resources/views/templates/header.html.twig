@@ -1,0 +1,9 @@
+<div class="row">
+{# 	{% for setting in app.user.configs %}
+		{{ dump(setting) }}
+	{% endfor %}
+ #}	<h3>{{ app.user.configs|first.schoolName }}</h3>
+	<p>{{ app.user.configs|first.schoolAddress }}</p>
+	<p>{{ app.user.configs|first.schoolTelephone }}</p>
+	<p>{{ app.user.configs|first.documentHeader|raw }}</p>
+</div>

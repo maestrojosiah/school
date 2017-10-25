@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+
+    <!-- DataTables CSS -->
+    <link href="{{ asset('vendor/datatables-plugins/dataTables.bootstrap.css') }}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{{ asset('vendor/datatables-responsive/dataTables.responsive.css') }}" rel="stylesheet">
+
+{% endblock %}
+{% block pagewrapper %}
+	{% set action_title = "Classes List" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+
+        {% block charts %}
+           {{ include('class/table.html.twig') }}        	
+         
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+{% block javascripts %}
+    <!-- DataTables JavaScript -->
+    <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+    });
+    </script>
+
+{% endblock %}

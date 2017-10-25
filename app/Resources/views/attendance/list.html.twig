@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block pagewrapper %}
+    {% set action_title = "Mark All As Present" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+        {% block otherstuff_lg12 %}
+		    <div class="panel panel-default">
+		        <div class="panel-heading">
+		            Mark All As present for {{ date }}. Uncheck the exceptions...
+		        </div>
+		        <!-- /.panel-heading -->
+		        <div class="panel-body">
+		            <div class="table-responsive">
+		                <table class="table table-hover" id="attendanceTable">
+		                    <thead>
+		                        <tr>
+		                            <th>#</th>
+		                            <th>Name</th>
+		                            <th>Morning</th>
+		                            <th>Afternoon</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                    	{% set counter = 0 %}
+		                    	{% for student in students %}
+		                    		{% set counter = counter + 1 %}
+			                        <tr>
+			                            <td>{{ counter }}</td>
+			                            <td>{{ student.fName }} {{ student.lName }}</td>
+			                            <td><div class="checkbox-inline">
+			                            	<label>
+                                            	<input value="morning_{{ student.id }}_{{ date }}" type="checkbox" id="morningCol" checked > Morning?
+                                            </label>
+                                        </div></td>
+			                            <td><div class="checkbox-inline">
+			                            	<label>
+                                            	<input value="afternoon_{{ student.id }}_{{ date }}" type="checkbox" id="afternoonCol" checked > Afternoon?
+                                            </label>
+                                        </div></td>
+			                        </tr>
+		                    	{% endfor %}
+		                    </tbody>
+		                </table>
+		            </div>
+		            <!-- /.table-responsive -->
+				<button type="button" id="saveAttendances" class="btn btn-primary btn-lg">Save Attendance</button>		            
+		        </div>
+		        <!-- /.panel-body -->
+		    </div>
+		    <!-- /.panel -->
+        {% endblock %}
+    {% endembed %}
+    {{ dump(date) }}
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+      $(document).ready(function() {
+          $("#saveAttendances").click(function(event) {
+          	var bothArray = Array();
+
+          	$('#attendanceTable > tbody  > tr').each(function() {
+          		var morn = $(this).find("#morningCol").val();
+          		var mornChecked = $(this).find('#morningCol').is(':checked') ? 'mtrue' : 'mfalse';
+          		var afte = $(this).find("#afternoonCol").val();
+          		var afteChecked = $(this).find('#afternoonCol').is(':checked') ? 'atrue' : 'afalse';
+ 				bothArray.push( morn+"~"+mornChecked+"|"+afte+"~"+afteChecked);
+ 				console.log(bothArray);
+          	});
+
+              $.ajax({
+                  url:'{{ (path('record_attendance_ajax')) }}',
+                  type: "POST",
+                  dataType: "json",
+                  data: {
+                      "array": JSON.stringify(bothArray),
+                  },
+                  async: true,
+                  success: function (data)
+                  {
+                    console.log("results:"+ data.time);
+                		location.href = "{{ path('attendance_classes') }}";
+
+                  }
+              });
+
+          });
+
+      });
+    </script>
+{% endblock %}

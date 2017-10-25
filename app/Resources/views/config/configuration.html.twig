@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+{% block pagewrapper %}
+    {% set action_title = "School Settings" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+            {% block otherstuff_lg12 %}
+
+
+            {{ form_start(form, {'method': 'post', 'action': path('change_settings'), 'attr': {'class': '' }} ) }}
+            {# {{ dump(form) }}
+             #}<div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                    {% if not form.vars.valid %}
+                      <div class="alert alert-warning">
+                      {{ form_errors(form) }}
+                      </div>        
+                    {% endif %}
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                 <div class="form-group">
+                                    <label>Name of School</label>
+                                      {{ form_widget(form.school_name, {'attr': {'class': 'form-control', 'placeholder': 'School name', 'id': 'school_name' }} ) }}
+                                    </div>
+                                    <div class="form-group">
+                                    <label>School Address</label>
+                                      {{ form_widget(form.school_address, {'attr': {'class': 'form-control', 'placeholder': 'School Address', 'id': 'school_address' }} ) }}
+                                    </div>
+                                    <div class="form-group">
+                                    <label>Document Header</label>
+                                      {{ form_widget(form.document_header, {'attr': {'class': 'form-control', 'rows': '3'}} ) }}
+                                    </div>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                                <div class="col-lg-6">
+          {#                         <form role="form">
+       #}                           <div class="form-group">
+                                    <label>School Telephone</label>
+                                      {{ form_widget(form.school_telephone, {'attr': {'class': 'form-control', 'placeholder': 'school_telephone', 'id': 'school_name' }} ) }}
+                                    </div>
+                                    <div class="form-group">
+                                    <label>Results Displayed Per Page</label>
+                                      {{ form_widget(form.results_per_page, {'attr': {'class': 'form-control', 'id': 'results_per_page' }} ) }}
+                                    </div>
+                                    <div class="form-group">
+                                    <label>Document Footer</label>
+                                      {{ form_widget(form.document_footer, {'attr': {'class': 'form-control', 'rows': '3'}} ) }}
+                                    </div>
+                                  {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary' }} ) }}
+                               </div>
+                                <!-- /.col-lg-6 (nested) -->
+              `             {{ form_end(form) }}
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            </div>
+
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

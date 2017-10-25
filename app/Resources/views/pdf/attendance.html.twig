@@ -1,0 +1,119 @@
+<style type="text/css">
+    body {
+        font-size: 14px;
+    }
+ 	table {
+    	border-collapse: collapse;
+        font-size: 12px;
+	}
+
+	table img {
+		 width:12px; 
+		 height:12px;
+	}
+
+	table, th, td {
+	    border: 1px solid black;
+	} 
+
+	th {
+	    text-align: left;
+	} 
+	th, td {
+	    padding: 5px;
+	    text-align: left;
+    	border-bottom: 1px solid #ddd;
+   	} 
+ 	tr:nth-child(even) {background-color: #f2f2f2} 
+     
+    table thead tr {
+        page-break-inside: avoid;
+    }
+    table tbody tr {
+        page-break-inside: avoid;
+    }
+
+</style>
+
+{% if attendances is defined and attendances is not empty and attendances[0]|length > 0 %}
+	{% if attendances[0]|length < 5 %}
+		{% set colLength = 3 %}
+	{% elseif attendances[0]|length > 0 and attendances[0]|length <= 10 %}
+		{% set colLength = 6 %}
+	{% elseif attendances[0]|length > 10 and attendances[0]|length <= 20 %}
+		{% set colLength = 9 %}
+	{% elseif attendances[0]|length > 20 and attendances[0]|length <= 31 %}
+		{% set colLength = 9 %}
+	{% else %}
+		{% set colLength = 12 %}
+	{% endif %}        		
+{{ include('templates/header.html.twig') }}
+  <div class="col-lg-{{ colLength }}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Class {{ class.classNumber }} Attendance Record Sheet For The Month Of {{ date|date("F") }}. Class Teacher: {{ class.classTeacher }}
+        </div>
+        <hr />
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                <thead>
+                    <tr>
+                    {% if attendances is not empty %}
+					    	<th></th>
+					    	<th></th>
+					    	<th></th>
+					    {% for date in attendances[0] %}
+						    <th class="col-md-1">
+						    	{{ date.onDate|date("d") }}
+						    </th>
+					    {% endfor %}
+					{% endif %}		                        	
+					</tr>
+                </thead>
+                    <tbody>
+                    {% if attendances is not empty %}
+					{% for attendance in attendances %}		                    	
+						{% set index = loop.index0 %}
+                        <tr class="something">
+						    <td class="col-md-1" nowrap>{{ attendance[0].student }}</td>
+						    <td class="col-md-1">{{ attendance[0].student.gender|first|capitalize }}</td>
+						    <td class="col-md-1"></td>
+						    {% for att in attendance%}
+                    		{% if att is not empty %}
+						    <td class="col-md-1">
+						    	{% if att.morning == true and att.afternoon == true %}
+									<img src="{{ system_file_path_to_web_folder }}/images/present_morning_and_afternoon.png" >
+						    	{% elseif att.morning == true and att.afternoon == false %}
+									<img src="{{ system_file_path_to_web_folder }}/images/present_absent.png" >	
+						    	{% elseif att.morning == false and att.afternoon == true %}
+									<img src="{{ system_file_path_to_web_folder }}/images/absent_present.png" >								    			
+						    	{% elseif att.morning == false and att.afternoon == false %}
+									<img src="{{ system_file_path_to_web_folder }}/images/absent_morning_and_afternoon.png" >
+						    	{% endif %}
+						    </td>
+							{% else %}
+								<td>...</td>
+							{% endif %}
+						    {% endfor %}
+						</tr>
+					{% endfor %}
+					{% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+  </div>
+{% else %}
+<div class="col-lg-6">
+	<p>No attendance records for {{ date|date("F") }} [Class {{class.classNumber}}]</p>
+	{% if students|length == 0 %} 
+		Please <a href="{{ path('add_student') }}">Add Students</a>. There are no students for this class.
+	{% endif %}
+</div>
+{% endif %}

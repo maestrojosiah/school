@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block pagewrapper %}
+    {% set action_title = student %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+        {% block otherstuff_lg12 %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Class: {{ student.classs }} | Age: {{ student.age }} | Gender: {{ student.gender }} | Parent's Phone: {{ student.contact }}.
+                </div>
+                    {# marks, company etc.. #}
+                <div class="panel-body">
+                    <div class="col-lg-12">
+                        {% set title = 'Exam Scores History' %}
+                        {% include "templates/barchart.html.twig" with {title: title} %}
+                    </div>
+                    <div class="col-lg-12">
+                        {% set title = 'Exam Total Marks History' %}
+                        {% include "templates/barchart2.html.twig" with {title: title} %}
+                    </div>
+                    <div class="col-lg-12">
+                        {% set title = 'Attendance Points: ' ~ attendedPoints ~ ' Out of ' ~ totalPoints %}
+                        {% include "templates/areachart.html.twig" with {title: title} %}
+                    </div>
+                </div>
+
+            </div>
+
+		{% endblock %}      
+    {% endembed %}
+{% endblock %}
+{% block javascripts %}
+    {% set subjects = [] %}
+    {% for entry,value in examList %}
+        {% for examx in value %}
+            {% if examx.subject.subjectTitle not in subjects %} 
+                {% set subjects = subjects|merge([ examx.subject.subjectTitle|raw ]) %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+	<script src="{{ asset('js/printThis.js') }}"></script>
+    <script>
+	  $(document).ready(function() {
+	    $( "#sendPrint" ).click(function(e) {
+	      $('#toPrint').printThis();
+	    });
+	  });
+    </script>
+
+    <script>
+	  $(document).ready(function() {
+        var subjectz = "";
+        {% for subject in subjects %}
+            subjectz += "'{{ subject }}',";
+        {% endfor %}
+        console.log(subjectz);
+	  });
+
+
+    </script>
+
+    <script>
+	  $(document).ready(function() {
+	    $( "#sendPrintBar" ).click(function(e) {
+	      $('#toPrintBar').printThis();
+	    });
+	  });
+    </script>
+
+	<script type="text/javascript">
+
+    Morris.Area({
+        element: 'morris-area-chart',
+        data: [
+		{% for entry,value in daily %}
+			{{ value|raw }},
+		{% endfor %}
+        ],
+        xkey: 'score',
+        ykeys: ['present', 'absent'],
+        labels: ['present', 'absent'],
+        pointSize: 2,
+        hideHover: 'auto',
+        resize: true,
+        xLabelAngle: 90
+    });
+
+	</script>
+
+    <script type="text/javascript">
+        
+
+        Morris.Bar({
+            element: 'morris-bar-chart',
+            data: [
+                {% for entry,value in examList %}
+                {% set index = loop.index0 %}
+                {
+                y: "{{ value[0].examCompany.companyName|raw }}", 
+                {% for examx in value %}
+                    "{{ examx.subject.subjectTitle|raw }}": {{ examx.marks }},
+                {% endfor %}
+                },
+        {% endfor %}
+            ],
+            xkey: 'y',
+            ykeys: [
+                {% for subject in subjects %}
+                    '{{ subject }}',
+                {% endfor %}
+            ],
+            labels: [
+                {% for subject in subjects %}
+                    '{{ subject }}',
+                {% endfor %}
+            ],
+            hideHover: 'auto',
+            resize: true,
+            xLabelAngle: 60
+
+        });
+        $('svg').height(450);
+    </script>
+    <script type="text/javascript">
+        {% set total = 0 %}
+        
+        var total
+        Morris.Bar({
+            element: 'morris-bar-chart-2',
+            data: [
+                {% for entry,value in examList %}
+                    {
+                    y: "{{ value[0].examCompany.companyName|raw }}", 
+                        {% for examx in value %}
+                        {% set total = total + examx.marks %}
+                        {% endfor %}
+                    'total': {{ total }}
+                    },
+                {% set total = 0 %}
+                {% endfor %}
+            ],
+            xkey: 'y',
+            ykeys: ['total'],
+            labels: ['Total Marks'],
+            hideHover: 'auto',
+            resize: true,
+            xLabelAngle: 60
+
+        });
+        $('svg').height(450);
+    </script>
+
+{% endblock %}

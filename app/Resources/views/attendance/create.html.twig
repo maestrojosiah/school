@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <!-- datepicker styles -->
+    <link rel="stylesheet" href="{{ asset('pickadate/lib/themes/default.css') }}">
+    <link rel="stylesheet" href="{{ asset('pickadate/lib/themes/default.date.css') }}">
+{% endblock %}
+{% block pagewrapper %}
+    {% set marked = "not marked" %}
+    {% set markedId = 0 %}
+    {% set morningChecked = true %}
+    {% set afternoonChecked = true %}
+    {% for attendance in data.student.attendances %}
+    	{% if attendance.onDate|date("Y m d") == data.todays_date|date("Y m d") %}
+    		{% set marked = "marked" %}
+        {% set markedId = attendance.id %}
+    		{% set morningChecked = attendance.morning ? true : false %}
+    		{% set afternoonChecked = attendance.afternoon ? true : false %}
+
+    	{% endif %}
+    {% endfor %}
+
+    {% set action_title = "Attendance Register" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+            {% block otherstuff_lg12 %}
+            {% if marked == "not marked" %}
+            <div class="alert alert-warning">
+              {{ data.student }} is {{ marked }} in today's register
+            </div>
+            {% else %}
+            <div class="alert alert-success">
+              {{ data.student }} is {{ marked }} in today's register
+            </div>
+            {% endif %}              
+    {% if marked == 'marked' %}
+    {% else %}
+    {% endif %}
+            <nav class="navbar navbar-default">
+              <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">Class {{ data.class }}</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li><a id="markAllLink" href="{{ path('mark_all', { 'date': form.on_date.vars.value, 'classId': data.class.id }) }}">Mark All As Present<span class="showDate"> (Today)</span></a></li>
+                    <li><a id="markAllAbsentLink" href="{{ path('mark_all_as_absent', { 'date': form.on_date.vars.value, 'classId': data.class.id }) }}">Mark All As Absent<span class="showDate"> (Today)</span></a></li>
+                    <li><a id="goToRegister" href="{{ path('attendance_register', { 'classId': data.class.id, 'dateString': form.on_date.vars.value } ) }}">Register</a></li>
+                  </ul>
+                </div><!-- /.navbar-collapse -->
+              </div><!-- /.container-fluid -->
+            </nav>            
+{# {{ dump()}} #}
+            {{ form_start(form, {'method': 'post', 'attr': {'class': '' }} ) }}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                    {% if not form.vars.valid %}
+                      <div class="alert alert-warning">
+                      {{ form_errors(form) }}
+                      </div>        
+                    {% endif %}
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                 <div class="form-group">
+                                    <label>Date </label>
+                                      {{ form_widget(form.on_date, {'attr': {'class': 'form-control datepicker', 'placeholder': 'Date', 'id': 'on_date' }} ) }}
+                                    </div>
+                                    <div class="form-group">
+                                    <label>Student </label>
+                                      {{ form_widget(form.student, {'attr': {'class': 'form-control' }} ) }}
+                                    </div>
+                                    <div class="form-group">
+                                      {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary' }} ) }}
+                                      {{ form_widget(form.saveAndAdd, {'attr': {'class': 'btn btn-primary' }} ) }}
+                                    </div>
+                                    <div class="form-group">
+										{% if data.previousStudent is empty %}
+											This is the first Student
+										{% else %}
+											<a class="btn btn-info" href="{{ path('record_attendance', { 'class': data.class.id, 'studentId': data.previousStudent[0].id } ) }}"> Previous</a>
+										{% endif %}
+
+										{% if data.nextStudent is empty %}
+											No more students
+										{% else %}
+											<a class="btn btn-info" href="{{ path('record_attendance', { 'class': data.class.id, 'studentId': data.nextStudent[0].id } ) }}"> Skip to Next</a>
+										{% endif %}
+
+                                    </div>
+                                 </div>
+                                <!-- /.col-lg-6 (nested) -->
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                    <label>Morning 
+                                      {{ form_widget(form.morning, {'attr': {'class': 'form-control', 'checked': morningChecked }} ) }}
+                                    </label>
+                                	</div>
+                                    <div class="form-group">
+                                    <label>Afternoon 
+                                      {{ form_widget(form.afternoon, {'attr': {'class': 'form-control', 'checked': afternoonChecked }} ) }}
+                                    </label>
+                                	</div>
+                               </div>
+                                <!-- /.col-lg-6 (nested) -->
+              `             {{ form_end(form) }}
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            </div>
+
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block javascripts %}
+    <!-- datepicker scripts -->
+    <script src="{{ asset('pickadate/lib/picker.js') }}"></script>
+    <script src="{{ asset('pickadate/lib/picker.date.js') }}"></script>
+    <script>
+      $('.datepicker').pickadate(
+        { 
+          format: 'yyyy-mm-dd',
+          formatSubmit: 'yyyy-mm-dd' 
+        }
+      );
+    </script>
+    <script>
+       $(document).ready(function() {
+          $( "#attendance_on_date" ).change(function() {
+            console.log( $(this).val() );
+            $("#markAllLink").attr("href", "/attendance/mark/{{data.class.id}}/" + $(this).val());
+            $("#markAllAbsentLink").attr("href", "/attendance/unmark/{{data.class.id}}/" + $(this).val());
+            $("#goToRegister").attr("href", "/attendance/view/{{data.class.id}}/" + $(this).val());
+            $(".showDate").text(" ("+$(this).val()+")");
+          });
+       });
+    </script>
+{% endblock %}
+
