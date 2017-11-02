@@ -38,7 +38,7 @@ class ExamCompanyController extends Controller
         	);
 
             $nextAction = $form->get('saveAndAdd')->isClicked()
-                ? 'add_examCompany'
+                ? 'add_company'
                 : 'homepage';
 
             return $this->redirectToRoute($nextAction);

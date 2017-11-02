@@ -291,7 +291,7 @@
                                     <a href="{{ path('list_exam_companies') }}" >Exam Companies</a>
                                 </li>
                                 <li>
-                                {% if app.user.classses %}
+                                {% if app.user and app.user.classses|first %}
                                   <a href="{{ path('view_exams', {'classId': app.user.classses|first.id, 'examCompanyId': 'new', 'term': 'none' }) }}" >Exam Summaries</a>
                                 {% endif %}
                                 </li>

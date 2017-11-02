@@ -22,9 +22,9 @@ class Exam
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="marks", type="integer")
+     * @ORM\Column(name="marks", type="string")
      */
     private $marks;
 
@@ -34,6 +34,13 @@ class Exam
      * @ORM\Column(name="term", type="integer")
      */
     private $term;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="subject_role", type="string")
+     */
+    private $subject_role;
 
     /**
      * @ORM\ManyToOne(targetEntity="Classs", inversedBy="exams")
@@ -58,6 +65,12 @@ class Exam
      * @ORM\JoinColumn(name="subject_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $subject;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ChildSubject", inversedBy="exams")
+     * @ORM\JoinColumn(name="c_subject_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $childSubject;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="exams")
@@ -245,5 +258,53 @@ class Exam
     public function getExamCompany()
     {
         return $this->examCompany;
+    }
+
+    /**
+     * Set subjectRole
+     *
+     * @param string $subjectRole
+     *
+     * @return Exam
+     */
+    public function setSubjectRole($subjectRole)
+    {
+        $this->subject_role = $subjectRole;
+
+        return $this;
+    }
+
+    /**
+     * Get subjectRole
+     *
+     * @return string
+     */
+    public function getSubjectRole()
+    {
+        return $this->subject_role;
+    }
+
+    /**
+     * Set childSubject
+     *
+     * @param \AppBundle\Entity\ChildSubject $childSubject
+     *
+     * @return Exam
+     */
+    public function setChildSubject(\AppBundle\Entity\ChildSubject $childSubject = null)
+    {
+        $this->childSubject = $childSubject;
+
+        return $this;
+    }
+
+    /**
+     * Get childSubject
+     *
+     * @return \AppBundle\Entity\ChildSubject
+     */
+    public function getChildSubject()
+    {
+        return $this->childSubject;
     }
 }

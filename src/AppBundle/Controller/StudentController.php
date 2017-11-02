@@ -265,7 +265,7 @@ class StudentController extends Controller
         foreach($exams as $exam){
             $limiter += 1;
 
-            $key = $exam->getExamCompany()->getId();
+            $key = $exam->getExamCompany()->getId().$exam->getTerm();
 
             if (isset($examList[$key])) {
                 $examList[$key][] = $exam;

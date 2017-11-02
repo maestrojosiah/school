@@ -1,0 +1,122 @@
+<style type="text/css">
+    body {
+        font-size: 14px;
+    }
+ 	table {
+    	border-collapse: collapse;
+        font-size: 12px;
+	}
+
+	table img {
+		 width:12px; 
+		 height:12px;
+	}
+
+	table, th, td {
+	    border: 1px solid black;
+	} 
+
+	th {
+	    text-align: left;
+	} 
+	th, td {
+	    padding: 5px;
+	    text-align: left;
+    	border-bottom: 1px solid #ddd;
+   	} 
+ 	tr:nth-child(even) {background-color: #f2f2f2} 
+     
+    table thead tr {
+        page-break-inside: avoid;
+    }
+    table tbody tr {
+        page-break-inside: avoid;
+    }
+
+    .text-danger{
+        color:red;
+    }
+
+    .text-primary{
+        color:blue;
+    }
+
+</style>
+{{ include('templates/header.html.twig') }}
+<h3>Score sheet for class {{ class.classNumber }}, {{ examCompany.companyName }} term {{ term }}</h3>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-hover toPrint"  id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th class="col-md-3 text-center">Name</th>
+                        {% for subject in subjects %}
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
+                            <th class="col-md-1 text-center text-{{color}}">{{ subject.subjectTitle }}</th>
+                        {% endfor %}
+                        <th class="col-md-1 text-info text-center text-danger">Totals</th>
+                        <th class="col-md-1 text-info text-center text-primary">Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for part in rank %}
+                        <tr>
+                            <td><span class="text-nowrap text-primary">{{ part[2] }}</span></td>
+                            {% for subject in subjects %}
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
+                                {% set key = part[2].id ~ subject.id %}
+                                {% if exam[key] is defined %}
+                                    {% set marks = exam[key].marks %}
+                                {% else %}
+                                    {% set marks = null %}
+                                {% endif %}
+                                <td class="text-center text-{{color}}">{{ marks }}</td>
+                            {% endfor %}
+                            <td class="text-info text-center text-danger"><strong>{{ part[0] }}</strong></td>
+                            <td class="text-info text-center text-primary"><strong>{{ part[1] }}</strong></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td class="text-info"><strong>Totals</strong></td>
+                        {% set sumTotalMarksSubject = 0 %}
+                        {% for subject in subjects %}
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
+                            {% set sumTotalMarksSubject = sumTotalMarksSubject + totalMarksSubject[subject.id] %}
+                            <td class="text-info text-center text-{{color}}"><strong>{{ rankSubj[subject.id][0] }}</strong></td>
+                        {% endfor %}
+                        <td class="text-info text-center text-danger"><strong>{{ sumTotalMarksSubject }}</strong></td>
+                        <td class="text-info text-center"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary"><strong>Mean Score</strong></td>
+                        {% for subject in subjects %}
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
+                        {% set meanScore = totalMarksSubject[subject.id] / students|length %}
+                            <td class="text-center text-{{color}}"><strong>{{ meanScore|round(2) }}</strong></td>
+                        {% endfor %}
+                        {% set totalMarksMean = sumTotalMarksSubject / students|length %}
+                        <td class="text-info text-center text-danger"><strong>{{ totalMarksMean|round(2) }}</strong></td>
+                        <td class="text-info text-center"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><strong>Position</strong></td>
+                        {% set sumTotalMarksSubject = 0 %}
+                        {% for subject in subjects %}
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}
+                            <td></td>
+                            {% else %}
+                            {% set sumTotalMarksSubject = sumTotalMarksSubject + totalMarksSubject[subject.id] %}
+                            <td class="text-info text-center text-primary"><strong>{{ rankSubj[subject.id][1] }}</strong></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td class="text-info text-center text-danger"><strong></strong></td>
+                        <td class="text-info text-center"></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{{ include('templates/footer.html.twig') }}

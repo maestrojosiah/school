@@ -19,4 +19,30 @@ class SubjectRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function getValidSubjects($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s')
+            ->where('s.role = :parent OR s.role = :no_role')
+            ->andWhere('s.user = :user')
+            ->setParameter('parent', 'parent')
+            ->setParameter('no_role', 'no_role')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getSubjectsForTotal($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s')
+            ->where('s.outOf != :children')
+            ->andWhere('s.user = :user')
+            ->setParameter('children', 'children')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

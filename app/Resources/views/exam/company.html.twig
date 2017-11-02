@@ -41,7 +41,7 @@
 	                	{% for exam in exams %}
 	                  		<a href="{{ path('add_exam_page', {'classId': exam.classs.id, 'examCompanyId': exam.examCompany.id, 'term': exam.term }) }}" class="list-group-item list-group-item-action">{{ exam.examCompany.companyName }} [Term {{ exam.term }}] </a>
 	                	{% endfor %}
-	                  		<a href="{{ path('add_exam_page', {'classId': class.id, 'examCompanyId': 'new', 'term': 'none' }) }}" class="list-group-item list-group-item-action">None Of The Above </a>
+	                  		<a href="{{ path('add_exam_page', {'classId': class.id, 'examCompanyId': 'new', 'term': 'none' }) }}" class="list-group-item list-group-item-action">New </a>
 	                </div>
 	            </div>
 	            <div class="modal-footer">

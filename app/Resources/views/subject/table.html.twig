@@ -4,18 +4,19 @@
                 <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Code</th>
+                        {# <th>Code</th> #}
                         <th>Manage</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for subject in subjects %}
                     <tr class="odd gradeX">
-                        <td>{{ subject.subjectTitle }}</td>
-                        <td>{{ subject.subjectCode }}</td>
+                        <td><a href="">{{ subject.subjectTitle }}</a></td>
+                        {# <td>{{ subject.subjectCode }}</td> #}
                         <td class="center">
                             <a class="btn btn-primary" href="{{ path('edit_subject', { 'subjectId': subject.id } ) }}">Edit</a>
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ subject.id }}">Delete</button>
+                            <a href="" class="btn btn-info">View Progress</a>
                         </td>
                     </tr>
                     <!-- Modal -->
@@ -27,7 +28,7 @@
                               <h4 class="modal-title">Are you sure?</h4>
                             </div>
                             <div class="modal-body">
-                              <p>Are you sure you want to delete {{ subject.subjectTitle }} [{{ subject.subjectCode }}].</p>
+                              <p>Are you sure you want to delete {{ subject.subjectTitle }} ?.</p>
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -42,7 +42,7 @@
     {% set subjects = [] %}
     {% for entry,value in examList %}
         {% for examx in value %}
-            {% if examx.subject.subjectTitle not in subjects %} 
+            {% if examx.subject and examx.subject.subjectTitle not in subjects %} 
                 {% set subjects = subjects|merge([ examx.subject.subjectTitle|raw ]) %}
             {% endif %}
         {% endfor %}
@@ -107,7 +107,9 @@
                 {
                 y: "{{ value[0].examCompany.companyName|raw }}", 
                 {% for examx in value %}
+                {% if examx.subject %} 
                     "{{ examx.subject.subjectTitle|raw }}": {{ examx.marks }},
+                {% endif %}
                 {% endfor %}
                 },
         {% endfor %}

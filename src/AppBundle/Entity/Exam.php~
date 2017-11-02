@@ -22,9 +22,9 @@ class Exam
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="marks", type="integer")
+     * @ORM\Column(name="marks", type="string")
      */
     private $marks;
 
@@ -34,6 +34,13 @@ class Exam
      * @ORM\Column(name="term", type="integer")
      */
     private $term;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="subject_role", type="string")
+     */
+    private $subject_role;
 
     /**
      * @ORM\ManyToOne(targetEntity="Classs", inversedBy="exams")
@@ -48,7 +55,7 @@ class Exam
     private $student;
 
     /**
-     * @ORM\ManyToOne(targetEntity="examCompany", inversedBy="exams")
+     * @ORM\ManyToOne(targetEntity="ExamCompany", inversedBy="exams")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $examCompany;
@@ -60,10 +67,20 @@ class Exam
     private $subject;
 
     /**
+     * @ORM\ManyToOne(targetEntity="ChildSubject", inversedBy="exams")
+     * @ORM\JoinColumn(name="c_subject_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $childSubject;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="exams")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;
+
+    public function __toString() {
+        return $this->examCompany->getId().$this->term;
+    }
 
     /**
      * Get id
@@ -97,30 +114,6 @@ class Exam
     public function getMarks()
     {
         return $this->marks;
-    }
-
-    /**
-     * Set company
-     *
-     * @param string $company
-     *
-     * @return Exam
-     */
-    public function setCompany($company)
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * Get company
-     *
-     * @return string
-     */
-    public function getCompany()
-    {
-        return $this->company;
     }
 
     /**
@@ -241,5 +234,53 @@ class Exam
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set examCompany
+     *
+     * @param \AppBundle\Entity\examCompany $examCompany
+     *
+     * @return Exam
+     */
+    public function setExamCompany(\AppBundle\Entity\examCompany $examCompany = null)
+    {
+        $this->examCompany = $examCompany;
+
+        return $this;
+    }
+
+    /**
+     * Get examCompany
+     *
+     * @return \AppBundle\Entity\examCompany
+     */
+    public function getExamCompany()
+    {
+        return $this->examCompany;
+    }
+
+    /**
+     * Set subjectRole
+     *
+     * @param string $subjectRole
+     *
+     * @return Exam
+     */
+    public function setSubjectRole($subjectRole)
+    {
+        $this->subject_role = $subjectRole;
+
+        return $this;
+    }
+
+    /**
+     * Get subjectRole
+     *
+     * @return string
+     */
+    public function getSubjectRole()
+    {
+        return $this->subject_role;
     }
 }

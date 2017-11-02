@@ -10,7 +10,7 @@
 {% endblock %}
 {% block pagewrapper %}
   {% if term and examCompany.companyName is defined %}
-    {% set action_title = "Exam Summary - " ~ examCompany.companyName ~ " Term " ~ term %}
+    {% set action_title = "Exam Summary - " ~ examCompany.companyName ~ " Term " ~ term ~ " Class " ~ class.classNumber %}
   {% else %}
     {% set action_title = "Exam Summary - New"%}
   {% endif %}
@@ -20,11 +20,27 @@
 
         {% block charts %}
            {{ include('exam/table.html.twig') }}        	
-         
+          <a href="{{ path('exam_profile', { 'classId': class.id } ) }}" class="btn btn-success btn-block">View Exam Performance History Graph</a>
+          <hr />
         {% endblock %}
     {% endembed %}
 {% endblock %}
 {% block javascripts %}
+  <script src="{{ asset('js/printThis.js') }}"></script>
+    <script>
+    $(document).ready(function() {
+      $( "#sendPrint" ).click(function(e) {
+        $('.toPrint a').removeAttr('href');
+        console.log('success');
+        $('.toPrint').printThis();
+        setTimeout(function() {
+          location.reload();
+        }, 15000);
+        
+      });
+    });
+    </script>
+
     <!-- DataTables JavaScript -->
     <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
@@ -33,7 +49,6 @@
     <script>
     $(document).ready(function() {
         $('#dataTables-example').DataTable({
-            responsive: true
         });
     });
     </script>
@@ -61,6 +76,19 @@
             $('#redirect').trigger('click');
         });
       </script>
+      
+      <script>
+        $(document).on('change', '#getClass', function(){
+          var termVal = $('#term').val();
+          var split = termVal.split("_");
+          var term = split[1];
+          $('#redirect').attr('href', "/exam/view/"+$(this).val()+"/"+$('#examCompany').val()+"/"+ term );
+            location.href = $('#redirect').attr('href');
+            console.log('changed');
+            $('#redirect').trigger('click');
+        });
+      </script>
 
 
+{# "pageLength": 3 #}
 {% endblock %}

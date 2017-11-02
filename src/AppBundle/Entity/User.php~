@@ -99,6 +99,11 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $exams;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ChildSubject", mappedBy="user")
+     */
+    private $childSubjects;
+
     public function __construct()
     {
         $this->active = true;
@@ -107,6 +112,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->students = new ArrayCollection();    
         $this->classses = new ArrayCollection();
         $this->exams = new ArrayCollection();
+        $this->childSubjects = new ArrayCollection();
     }
     
     /**

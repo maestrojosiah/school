@@ -1,50 +1,61 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         Exam Summary for 
-		       <select class="form-inline" id="term">
+    	<select class="form-inline" id="term">
           <option value="none" {% if term == "none" %} selected {% endif %}>Choose Term</option>
             <option value="term_1" {% if term == 1 %} selected {% endif %}>Term 1</option>
             <option value="term_2" {% if term == 2 %} selected {% endif %}>Term 2</option>
             <option value="term_3" {% if term == 3 %} selected {% endif %}>Term 3</option>
         </select>
-      {{ dump(rank)}}
-     <select class="form-inline" id="examCompany">
-          <option value="select_one" {% if examCompany == null %} selected {% endif %} disabled >Select Exam Company</option>
-          {% for company in examCompanies %}
-            <option value="{{ company.id }}" {% if examCompany != null and examCompany.id == company.id %} selected {% endif %}>{{ company.companyName }}</option>
-          {% endfor %}
-      </select>
+         <select class="form-inline" id="examCompany">
+              <option value="select_one" {% if examCompany == null %} selected {% endif %} disabled >Select Exam Company</option>
+              {% for company in examCompanies %}
+                <option value="{{ company.id }}" {% if examCompany != null and examCompany.id == company.id %} selected {% endif %}>{{ company.companyName }}</option>
+              {% endfor %}
+          </select>
+         <select class="form-inline" id="getClass">
+              <option value="select_one" {% if examCompany == null %} selected {% endif %} disabled >Select Exam Company</option>
+              {% for getclass in app.user.classses %}
+                <option value="{{ getclass.id }}" {% if getclass != null and getclass.id == class.id %} selected {% endif %}> Class {{ getclass.classNumber }}</option>
+              {% endfor %}
+          </select>
       {% if class != null and examCompany != null %}
       	<a href="{{ path('add_exam_page', {'classId': class.id, 'examCompanyId': examCompany.id, 'term': term }) }}" class="btn btn-default">Edit Records</a>
+        <a class="btn btn-sm btn-primary" href="{{ path('download_exams', {'classId': class.id, 'examCompanyId': examCompany.id, 'term': term }) }}">Download</a>
+        <button type="button" id="sendPrint" class="btn btn-primary btn-sm">Print Table</button>
   	  {% endif %}
     </div>
-		{# marks, company etc.. #}
+
     <div class="panel-body">
         <div class="table-responsive">
-            <table class="table table-hover"  id="dataTables-example">
+            <table class="table table-hover toPrint"  id="-example">
                 <thead>
                     <tr>
                         <th class="col-md-3 text-center">Name</th>
                         {% for subject in subjects %}
-                        	<th class="col-md-1 text-center">{{ subject.subjectTitle }}</th>
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
+                        	<th class="col-md-1 text-center text-{{color}}"><a href="{{ path('subject_profile', { 'subjectId': subject.id, 'classId': class.id } ) }}">{{ subject.subjectTitle }}</a></th>
                     	{% endfor %}
-                    	<th class="col-md-1 text-info text-center">Totals</th>
+                        <th class="col-md-1 text-info text-center text-danger"><a href="{{ path('exam_profile', { 'classId': class.id } ) }}">Totals</a></th>
+                    	<th class="col-md-1 text-info text-center text-primary">Position</th>
                     </tr>
                 </thead>
                 <tbody>
-                	{% for student in students %}
+                	{% for part in rank %}
                 		<tr>
-                			<td><span class="text-nowrap"><a href="{{ path('student_profile', { studentId: student.id } ) }}">{{ student }}</a></span></td>
+                			<td><span class="text-nowrap"><a href="{{ path('student_profile', { studentId: part[2].id } ) }}">{{ part[2] }}</a></span></td>
                             {% for subject in subjects %}
-	                      		{% set key = student.id ~ subject.id %}
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
+	                      		{% set key = part[2].id ~ subject.id %}
 	                        	{% if exam[key] is defined %}
 		                          	{% set marks = exam[key].marks %}
 		                        {% else %}
 		                          	{% set marks = null %}
 	                        	{% endif %}
-                            	<td class="text-center">{{ marks }}</td>
+                            	<td class="text-center text-{{color}}">{{ marks }}</td>
                         	{% endfor %}
-                        	<td class="text-info text-center"><strong>{{ totalMarksStudent[student.id] }}</strong></td>
+                            <td class="text-info text-center text-danger"><strong>{{ part[0] }}</strong></td>
+                        	<td class="text-info text-center text-primary"><strong>{{ part[1] }}</strong></td>
                 		</tr>
                 	{% endfor %}
                 </tbody>
@@ -53,19 +64,37 @@
                         <td class="text-info"><strong>Totals</strong></td>
                         {% set sumTotalMarksSubject = 0 %}
                         {% for subject in subjects %}
+                        {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
                             {% set sumTotalMarksSubject = sumTotalMarksSubject + totalMarksSubject[subject.id] %}
-                            <td class="text-info text-center"><strong>{{ totalMarksSubject[subject.id] }}</strong></td>
+                            <td class="text-info text-center text-{{color}}"><strong>{{ rankSubj[subject.id][0] }}</strong></td>
                         {% endfor %}
-                        <td class="text-info text-center"><strong>{{ sumTotalMarksSubject }}</strong></td>
+                        <td class="text-info text-center text-danger"><strong>{{ totalMarks }}</strong></td>
+                        <td class="text-info text-center"></td>
                     </tr>
                     <tr>
                         <td class="text-primary"><strong>Mean Score</strong></td>
                         {% for subject in subjects %}
+                        {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
                         {% set meanScore = totalMarksSubject[subject.id] / students|length %}
-                            <td class="text-primary text-center"><strong>{{ meanScore|round(2) }}</strong></td>
+                            <td class="text-primary text-center text-{{color}}"><strong>{{ meanScore|round(2) }}</strong></td>
                         {% endfor %}
                         {% set totalMarksMean = sumTotalMarksSubject / students|length %}
-                        <td class="text-info text-center"><strong>{{ totalMarksMean|round(2) }}</strong></td>
+                        <td class="text-info text-center text-danger"><strong>{{ totalMarksMean|round(2) }}</strong></td>
+                        <td class="text-info text-center"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><strong>Position</strong></td>
+                        {% set sumTotalMarksSubject = 0 %}
+                        {% for subject in subjects %}
+                            {% if subject.outOf < 100 and subject.outOf != 'children' %}
+                            <td></td>
+                            {% else %}
+                            {% set sumTotalMarksSubject = sumTotalMarksSubject + totalMarksSubject[subject.id] %}
+                            <td class="text-info text-center text-primary"><strong>{{ rankSubj[subject.id][1] }}</strong></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td class="text-info text-center text-danger"><strong></strong></td>
+                        <td class="text-info text-center"></td>
                     </tr>
 
                 </tbody>

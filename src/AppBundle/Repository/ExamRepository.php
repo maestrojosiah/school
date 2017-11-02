@@ -27,11 +27,12 @@ class ExamRepository extends \Doctrine\ORM\EntityRepository
         return $this->createQueryBuilder('s')
             ->select('s')
             ->where('s.student = :student')
-            ->andWhere('s.subject = :subject')
+            ->andWhere('s.subject = :subject OR s.childSubject = :childSubject')
             ->andWhere('s.examCompany = :examCompany')
             ->andWhere('s.term = :term')
             ->setParameter('student', $student)
             ->setParameter('subject', $subject)
+            ->setParameter('childSubject', $subject)
             ->setParameter('examCompany', $examCompany)
             ->setParameter('term', $term)
             ->getQuery()
@@ -45,21 +46,53 @@ class ExamRepository extends \Doctrine\ORM\EntityRepository
             ->where('s.student = :student')
             ->andWhere('s.examCompany = :examCompany')
             ->andWhere('s.term = :term')
+            ->andWhere('s.subject_role != :child')
             ->setParameter('student', $student)
             ->setParameter('examCompany', $examCompany)
+            ->setParameter('child', 'child')
             ->setParameter('term', $term)
             ->getQuery()
             ->getSingleScalarResult();
     }
 
-    public function getTotalMarksForSubject($subject, $examCompany, $term)
+    public function getTotalMarksForSubject($subject, $examCompany, $term, $class)
     {
         return $this->createQueryBuilder('s')
             ->select('SUM(s.marks)')
             ->andWhere('s.subject = :subject')
             ->andWhere('s.examCompany = :examCompany')
             ->andWhere('s.term = :term')
+            ->andWhere('s.classs = :class')
             ->setParameter('subject', $subject)
+            ->setParameter('examCompany', $examCompany)
+            ->setParameter('term', $term)
+            ->setParameter('class', $class)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getTotalMarksForChildSubject($subject, $examCompany, $term, $class)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('SUM(s.marks)')
+            ->andWhere('s.childSubject = :childSubject')
+            ->andWhere('s.examCompany = :examCompany')
+            ->andWhere('s.term = :term')
+            ->andWhere('s.classs = :class')
+            ->setParameter('childSubject', $subject)
+            ->setParameter('examCompany', $examCompany)
+            ->setParameter('term', $term)
+            ->setParameter('class', $class)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getTotalMarksForCompany($examCompany, $term)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('SUM(s.marks)')
+            ->andWhere('s.examCompany = :examCompany')
+            ->andWhere('s.term = :term')
             ->setParameter('examCompany', $examCompany)
             ->setParameter('term', $term)
             ->getQuery()
@@ -76,20 +109,44 @@ class ExamRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
-    public function isAlreadyRecorded($student, $class, $subject, $examCompany)
+    public function isAlreadyRecorded($student, $class, $subject, $examCompany, $term)
     {
         return $this->createQueryBuilder('a')
             ->select('a')
             ->where('a.student = :student')
             ->andWhere('a.classs = :class')
             ->andWhere('a.subject = :subject')
+            ->andWhere('a.childSubject IS NULL')
             ->andWhere('a.examCompany = :examCompany')
+            ->andWhere('a.term = :term')
             ->orderBy('a.id', 'DESC')
             ->setMaxResults(1)
             ->setParameter('student', $student)
             ->setParameter('class', $class)
             ->setParameter('subject', $subject)
             ->setParameter('examCompany', $examCompany)
+            ->setParameter('term', $term)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function isAlreadyRecordedChild($student, $class, $childSubject, $examCompany, $term)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a')
+            ->where('a.student = :student')
+            ->andWhere('a.classs = :class')
+            ->andWhere('a.subject IS NULL')
+            ->andWhere('a.childSubject = :childSubject')
+            ->andWhere('a.examCompany = :examCompany')
+            ->andWhere('a.term = :term')
+            ->orderBy('a.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('student', $student)
+            ->setParameter('class', $class)
+            ->setParameter('childSubject', $childSubject)
+            ->setParameter('examCompany', $examCompany)
+            ->setParameter('term', $term)
             ->getQuery()
             ->getOneOrNullResult();
     }

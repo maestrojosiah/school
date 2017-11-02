@@ -99,6 +99,11 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $exams;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ChildSubject", mappedBy="user")
+     */
+    private $childSubjects;
+
     public function __construct()
     {
         $this->active = true;
@@ -107,6 +112,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->students = new ArrayCollection();    
         $this->classses = new ArrayCollection();
         $this->exams = new ArrayCollection();
+        $this->childSubjects = new ArrayCollection();
     }
     
     /**
@@ -502,5 +508,39 @@ class User implements AdvancedUserInterface, \Serializable
     public function getExams()
     {
         return $this->exams;
+    }
+
+    /**
+     * Add childSubject
+     *
+     * @param \AppBundle\Entity\ChildSubject $childSubject
+     *
+     * @return User
+     */
+    public function addChildSubject(\AppBundle\Entity\ChildSubject $childSubject)
+    {
+        $this->childSubjects[] = $childSubject;
+
+        return $this;
+    }
+
+    /**
+     * Remove childSubject
+     *
+     * @param \AppBundle\Entity\ChildSubject $childSubject
+     */
+    public function removeChildSubject(\AppBundle\Entity\ChildSubject $childSubject)
+    {
+        $this->childSubjects->removeElement($childSubject);
+    }
+
+    /**
+     * Get childSubjects
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildSubjects()
+    {
+        return $this->childSubjects;
     }
 }

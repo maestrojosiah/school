@@ -31,9 +31,9 @@ class Subject
     /**
      * @var string
      *
-     * @ORM\Column(name="subject_code", type="string", length=255)
+     * @ORM\Column(name="out_of", type="string", length=255)
      */
-    private $subjectCode;
+    private $outOf;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="subjects")
@@ -46,12 +46,22 @@ class Subject
      */
     private $exams;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ChildSubject", mappedBy="parent")
+     */
+    private $childSubjects;
+
      /**
      * Constructor
      */
     public function __construct()
     {
         $this->exams = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childSubjects = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function __toString() {
+        return $this->subjectTitle;
     }
 
    /**
@@ -86,30 +96,6 @@ class Subject
     public function getSubjectTitle()
     {
         return $this->subjectTitle;
-    }
-
-    /**
-     * Set subjectCode
-     *
-     * @param string $subjectCode
-     *
-     * @return Subject
-     */
-    public function setSubjectCode($subjectCode)
-    {
-        $this->subjectCode = $subjectCode;
-
-        return $this;
-    }
-
-    /**
-     * Get subjectCode
-     *
-     * @return string
-     */
-    public function getSubjectCode()
-    {
-        return $this->subjectCode;
     }
 
     /**
@@ -168,5 +154,111 @@ class Subject
     public function getExams()
     {
         return $this->exams;
+    }
+
+    /**
+     * Set outOf
+     *
+     * @param string $outOf
+     *
+     * @return Subject
+     */
+    public function setOutOf($outOf)
+    {
+        $this->outOf = $outOf;
+
+        return $this;
+    }
+
+    /**
+     * Get outOf
+     *
+     * @return string
+     */
+    public function getOutOf()
+    {
+        return $this->outOf;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param string $parent
+     *
+     * @return Subject
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return string
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Set children
+     *
+     * @param string $children
+     *
+     * @return Subject
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
+    /**
+     * Get children
+     *
+     * @return string
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Add childSubject
+     *
+     * @param \AppBundle\Entity\ChildSubject $childSubject
+     *
+     * @return Subject
+     */
+    public function addChildSubject(\AppBundle\Entity\ChildSubject $childSubject)
+    {
+        $this->childSubjects[] = $childSubject;
+
+        return $this;
+    }
+
+    /**
+     * Remove childSubject
+     *
+     * @param \AppBundle\Entity\ChildSubject $childSubject
+     */
+    public function removeChildSubject(\AppBundle\Entity\ChildSubject $childSubject)
+    {
+        $this->childSubjects->removeElement($childSubject);
+    }
+
+    /**
+     * Get childSubjects
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildSubjects()
+    {
+        return $this->childSubjects;
     }
 }

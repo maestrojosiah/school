@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block pagewrapper %}
+  {# {{ dump(test)}} #}
+  {# {{ dump(exam)}} #}
   {% if term and examCompany.companyName is defined %}
-    {% set action_title = "Exam Records - " ~ examCompany.companyName ~ " Term " ~ term %}
+    {% set action_title = "Exam Records - " ~ examCompany.companyName ~ " Term " ~ term ~ " Class " ~ class.classNumber %}
   {% else %}
     {% set action_title = "Exam Records - New"%}
   {% endif %}
@@ -22,11 +24,18 @@
 	                    <option value="term_2" {% if term == 2 %} selected {% endif %}>Term 2</option>
 	                    <option value="term_3" {% if term == 3 %} selected {% endif %}>Term 3</option>
 	                </select>
-	                | <strong>Exam company</strong>
+                  | <strong>Exam company</strong>
                  <select class="form-inline" id="examCompany">
                       <option value="select_one" {% if examCompany == null %} selected {% endif %} disabled >Select Exam Company</option>
                       {% for company in examCompanies %}
                         <option value="{{ company.id }}" {% if examCompany != null and examCompany.id == company.id %} selected {% endif %}>{{ company.companyName }}</option>
+                      {% endfor %}
+                  </select>
+	                | <strong>Class</strong>
+                 <select class="form-inline" id="getClass">
+                      <option value="select_one" {% if examCompany == null %} selected {% endif %} disabled >Select Exam Company</option>
+                      {% for getclass in app.user.classses %}
+                        <option value="{{ getclass.id }}" {% if getclass != null and getclass.id == class.id %} selected {% endif %}>{{ getclass }}</option>
                       {% endfor %}
                   </select>
                   <a href="{{ path('add_company') }}" class="btn btn-default">Add Company</a>
@@ -40,7 +49,7 @@
 		                        <tr>
 		                            <th class="col-md-3">Name</th>
 		                            {% for subject in subjects %}
-		                            	<th class="col-md-1">{{ subject.subjectTitle }}</th>
+		                            	<th class="col-md-1"><a href="{{ path('subject_profile', { 'subjectId': subject.id, 'classId': class.id } ) }}" >{{ subject.subjectTitle }}</a></th>
 		                        	{% endfor %}
 		                        </tr>
 		                    </thead>
@@ -48,14 +57,14 @@
 		                    	{% for student in students %}
 		                    		<tr>
 		                    			<td><span class="text-nowrap"><a href="{{ path('student_profile', { studentId: student.id } ) }}">{{ student }}</a></span></td>
-			                            {% for subject in subjects %}
+			                            {% for role,subject in subjects %}
                                   {% set key = student.id ~ subject.id %}
                                     {% if exam[key] is defined %}
                                       {% set marks = exam[key].marks %}
                                     {% else %}
                                       {% set marks = null %}
                                     {% endif %}
-			                            	<td><input style="max-width:50px;" type="text" class="form-input" id="subject_{{subject.id}}|student_{{student.id}}" value="{{ marks }}"></td>
+			                            	<td><input style="max-width:50px;" type="text" class="form-input" id="subject_{{subject.id}}|student_{{student.id}}|role_{{role}}" value="{{ marks }}"></td>
 			                        	{% endfor %}
 		                    		</tr>
 		                    	{% endfor %}
@@ -97,10 +106,13 @@
             var splitFirst = category.split('|');
             var subjectWithId = splitFirst[0];
             var studentWithId = splitFirst[1];
+            var roleWithId = splitFirst[2];
             var subject = subjectWithId.split('_');
             var subject_id = subject[1];
             var student = studentWithId.split('_');
             var student_id = student[1] ;
+            var roleId = roleWithId.split('_');
+            var role = roleId[1] ;
 
             var marks = $(this).val();
             var term = $("#term").val();
@@ -117,6 +129,7 @@
                 data: {
                     "subject_id": subject_id,
                     "student_id": student_id,
+                    "role": role,
                     "marks": marks,
                     "term": term,
                     "examCompany": examCompany,
@@ -125,11 +138,12 @@
                 async: true,
                 success: function (data)
                 {
-                  $('#alert').html("<strong> Student: </strong> " + data.student + "<strong> Subject: </strong> "+ data.subject + "<strong> Marks: </strong>" + data.marks + "<strong> Exam Company: </strong>" + data.examCompany + "<strong> Term {{term}} </strong>" );
+                  $('#alert').html("<strong><small> Student: </small></strong> " + data.student + "<strong><small> Subject: </small></strong> "+ data.subject + "<strong><small> Marks: </small></strong>" + data.marks + "<strong><small> Exam Company: </small></strong>" + data.examCompany + "<strong><small> Term </small></strong>" + data.term + "<strong><small> Class: </small></strong>" + data.class );
+                  // $('#alert').html("Test: " + data.test );
                 },
                error: function () {
                   $('#alert').removeClass('alert-info').addClass('alert-warning');
-                  $('#alert').html("Something went wrong. Please call 0705285959 for assistance");
+                  $('#alert').html("Something went wrong. Make sure you are typing only numbers and that the values are valid. Please call 0705285959 for assistance");
               }
             });
           }
@@ -155,6 +169,18 @@
           var split = termVal.split("_");
           var term = split[1];
           $('#redirect').attr('href', "/exam/create/{{ class.id }}/"+$('#examCompany').val()+"/"+ term );
+            location.href = $('#redirect').attr('href');
+            console.log('changed');
+            $('#redirect').trigger('click');
+        });
+      </script>
+
+      <script>
+        $(document).on('change', '#getClass', function(){
+          var termVal = $('#term').val();
+          var split = termVal.split("_");
+          var term = split[1];
+          $('#redirect').attr('href', "/exam/create/"+$(this).val()+"/"+$('#examCompany').val()+"/"+ term );
             location.href = $('#redirect').attr('href');
             console.log('changed');
             $('#redirect').trigger('click');

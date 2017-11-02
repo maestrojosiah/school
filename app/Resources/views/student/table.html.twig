@@ -20,6 +20,7 @@
                         <td class="center">
                             <a class="btn btn-primary" href="{{ path('edit_student', { 'studentId': student.id } ) }}">Edit</a>
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ student.id }}">Delete</button>
+                            <a href="{{ path('student_profile', { studentId: student.id } ) }}" class="btn btn-info">View Progress</a>
                         </td>
                     </tr>
                     <!-- Modal -->

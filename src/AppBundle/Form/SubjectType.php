@@ -8,19 +8,28 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class SubjectType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('subject_title', TextType::class, array('label' => false ))
-            ->add('subject_code', TextType::class, array('label' => false ))
-            ->add('saveAndAdd', SubmitType::class, array(
-                'label' => "Save and Add More"
-            ))
-            ->add('save', SubmitType::class, array(
-                'label' => "Save Subject"
+            ->add('subject_title', ChoiceType::class, array(
+                'choices'  => array(
+                    'Maths' => 'Maths',
+                    'English(Language+Composition)' => 'English|parent|Language_Composition',
+                    'English' => 'English',
+                    'Kiswahili(Lugha+Insha)' => 'Kiswahili|parent|Lugha_Insha',
+                    'Kiswahili' => 'Kiswahili',
+                    'Science' => 'Science',
+                    'Social Studies(SS+CRE)' => 'Social/CRE|parent|Social-Studies_CRE',
+                    'Social Studies' => 'Social-Studies',
+                    'Music' => 'Music',
+                    'Art and Craft' => 'Art-and-Craft',
+                    'Home Science' => 'Home-Science',
+                    'Other' => 'Other'
+                ),
             ))
         ;
     }
