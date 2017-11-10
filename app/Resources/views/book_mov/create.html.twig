@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+{% block pagewrapper %}
+    {% set action_title = "Add Book Record" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+        {% block otherstuff_lg12 %}
+        	<div class="col-lg-4">
+                <h2>Choose Class</h2>
+				<select id="which_class" class="form-control"></select>
+                <hr />
+                <h2 id="which_student_title" style="display:none;">Choose Student</h2>
+				<select id="which_student" class="form-control" style="display:none"></select>
+                <h2>History</h2>
+                <table class="table table-striped table-bordered table-hover" id="booksMv">
+                </table>
+			</div>
+        	<div class="col-lg-8" id="which_books" style="display:none">
+                <div class="table-responsive">
+                    <h2 id="owner"></h2>
+                    <table class="table table-striped table-bordered table-hover" id="booksHaveList">
+                    </table>
+                    <h2 id="allBooks"></h2>
+                    <table class="table table-striped table-bordered table-hover" id="booksList">
+                    </table>
+                </div>
+			</div>
+        	<div class="col-lg-4" id="progress">
+			</div>
+		{% endblock %}
+	{% endembed %}
+{% endblock %}
+
+{% block javascripts %}
+
+      <script type="text/javascript">
+        $(window).on('load',function(){
+
+        	$('#which_class').show();
+			$( "#which_class" ).empty();
+            $.ajax({
+                url:'{{ (path('list_book_classes')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "action": 'action',
+                },
+                async: true,
+                success: function (data)
+                {
+                	// console.log('classes list'+data.html);
+                	$('#which_class').append(data.html);
+                }
+            });
+
+        });
+      </script>
+
+      <script type="text/javascript">
+        $(document).on('change', '#which_class', function(){
+          var classs = $('#which_class').val();
+
+            $('#which_student').show();
+        	$('#which_student_title').show();
+			$( "#which_student" ).empty();
+
+            $.ajax({
+                url:'{{ (path('list_book_students')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "classs": classs,
+                },
+                async: true,
+                success: function (data)
+                {
+                	// console.log('classes list'+data.html);
+                	$('#which_student').append(data.html);
+                }
+            });
+
+        });
+      </script>
+
+      <script type="text/javascript">
+        $(document).on('change', '#which_student', function(){
+          var classs = $('#which_class').val();
+          var student = $('#which_student').val();
+
+        	$('#which_books').show();
+			$( "#booksList" ).empty();
+            $( "#booksHaveList" ).empty();
+			$( "#booksMv" ).empty();
+
+            $.ajax({
+                url:'{{ (path('list_which_books')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "classs": classs,
+                    "student": student,
+                },
+                async: true,
+                success: function (data)
+                {
+                	console.log('classes list'+data.html);
+                	$('#booksList').append(data.html);
+                    $('#booksHaveList').append(data.htmlHave);
+                    $('#booksMv').append(data.htmlMv);
+                    $('#owner').text('Books Owned By '+data.student);
+                	$('#allBooks').text('All Available Books');
+                }
+            });
+
+        });
+      </script>
+
+      <script type="text/javascript">
+        $(document).on('click', '[id^="book_"]', function(){
+          var classs = $('#which_class').val();
+          var student = $('#which_student').val();
+
+          	var bookId = jQuery(this).attr("id");
+	        var splitted = bookId.split('_'); 
+            var id = splitted[2] 
+	        var give_or_take = splitted[1] 
+            var in_or_out = give_or_take == 'give' ? 'out' : 'in';
+            var showStatus = in_or_out == "in" ? "<span style='font-size:34; font-weight:bold;' class='text-success'>"+in_or_out+"</span>" : "<span style='font-size:34; font-weight:bold;' class='text-danger'>"+in_or_out+"</span>" ;
+            $('#toUpdate_'+id).html(showStatus);
+
+            if(give_or_take == 'firstTake'){
+                var $row = $(this).closest('tr');
+                $row.addClass('storedText'+id);
+                $row.fadeOut(1000, function() {
+                    $('#booksHaveList').append($row);
+                    $row.fadeIn(1000);
+                });
+            }
+            
+            $.ajax({
+                url:'{{ (path('ajax_save_bk_movement')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "give_or_take": give_or_take,
+                    "classs": classs,
+                    "student": student,
+                    "id": id,
+                },
+                async: true,
+                success: function (data)
+                {
+                	console.log('bookcheck-'+data.lastEntry);
+                    $('.storedText'+id).html("<td><button class='btn btn-success btn-block'>Stored "+ data.book+"</button></td>" );                    
+                }
+            });
+        });
+      </script>
+
+{% endblock %}

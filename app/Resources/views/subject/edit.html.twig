@@ -114,8 +114,8 @@
                 async: true,
                 success: function (data)
                 {
-          $('#out_of_1').val("");
-          $('#out_of_2').val("");                 
+                  $('#out_of_1').val("");
+                  $('#out_of_2').val("");                 
                   $('#alert').removeClass('alert-warning').addClass('alert-info');
                   $('#alert').show().html(data.parentName+" - The subject has been successfully edited. <a href=\"{{path('list_subjects')}}\">Go to subjects list</a>");
                 },

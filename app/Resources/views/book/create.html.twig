@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block pagewrapper %}
+    {% set action_title = "Add Book" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+        {% block charts %}
+        {% endblock %}
+        {% block otherstuff_lg8 %}
+
+		{{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal' }} ) }}
+	              <div class="alert alert-warning" id="alert" style="display:none;">
+	              </div>
+				{% if not form.vars.valid %}
+	              <div class="alert alert-warning">
+	              {{ form_errors(form) }}
+	              </div>				
+          		{% endif %}
+			  <div class="form-group">
+			    <label for="book_title" class="col-sm-4 control-label">Book Title</label>
+			    <div class="col-sm-8">
+		    		{{ form_row(form.book_title, {'attr': {'class': 'form-control', 'placeholder': 'Book Title', 'id': 'book_title' }}) }}
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="out_of_2" id="out_of_2_label" class="col-sm-4 control-label"></label>
+			    <div class="col-sm-8">
+		    		{{ form_row(form.save, {'attr': {'class': 'btn btn-info'} } ) }}
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="out_of_2" id="out_of_2_label" class="col-sm-4 control-label"></label>
+			    <div class="col-sm-8">
+		    		{{ form_row(form.saveAndAdd, {'attr': {'class': 'btn btn-info'} } ) }}
+			    </div>
+			  </div>
+		{{ form_end(form) }}
+
+		{% endblock %}
+	{% endembed %}
+{% endblock %}
+

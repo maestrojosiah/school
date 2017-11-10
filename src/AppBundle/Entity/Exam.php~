@@ -283,4 +283,28 @@ class Exam
     {
         return $this->subject_role;
     }
+
+    /**
+     * Set childSubject
+     *
+     * @param \AppBundle\Entity\ChildSubject $childSubject
+     *
+     * @return Exam
+     */
+    public function setChildSubject(\AppBundle\Entity\ChildSubject $childSubject = null)
+    {
+        $this->childSubject = $childSubject;
+
+        return $this;
+    }
+
+    /**
+     * Get childSubject
+     *
+     * @return \AppBundle\Entity\ChildSubject
+     */
+    public function getChildSubject()
+    {
+        return $this->childSubject;
+    }
 }

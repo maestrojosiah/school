@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+{% block pagewrapper %}
+	{% set action_title = "Books List" %}
+    {% embed "templates/pagewrapper.html.twig" %}
+        {% block toplinks %}
+        {% endblock %}
+
+        {% block charts %}
+           {{ include('book/table.html.twig') }}        	
+         <a href="{{ path('add_book') }}" class="btn btn-primary">Add Book</a>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

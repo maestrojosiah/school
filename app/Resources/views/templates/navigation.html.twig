@@ -282,6 +282,21 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Books<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ path('add_book') }}" >Add Book</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('list_books') }}" >List Books</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('add_book_movement') }}" >Add Book Record</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                             <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Exams<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -294,6 +309,18 @@
                                 {% if app.user and app.user.classses|first %}
                                   <a href="{{ path('view_exams', {'classId': app.user.classses|first.id, 'examCompanyId': 'new', 'term': 'none' }) }}" >Exam Summaries</a>
                                 {% endif %}
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Documents<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ path('add_document') }}" >Add Document</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('list_documents') }}" >Your Documents</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

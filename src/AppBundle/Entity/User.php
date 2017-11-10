@@ -100,9 +100,19 @@ class User implements AdvancedUserInterface, \Serializable
     private $exams;
 
     /**
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="user")
+     */
+    private $documents;
+
+    /**
      * @ORM\OneToMany(targetEntity="ChildSubject", mappedBy="user")
      */
     private $childSubjects;
+
+    /**
+     * @ORM\OneToMany(targetEntity="BookMovement", mappedBy="user")
+     */
+    private $bookMovements;
 
     public function __construct()
     {
@@ -112,7 +122,9 @@ class User implements AdvancedUserInterface, \Serializable
         $this->students = new ArrayCollection();    
         $this->classses = new ArrayCollection();
         $this->exams = new ArrayCollection();
+        $this->documents = new ArrayCollection();
         $this->childSubjects = new ArrayCollection();
+        $this->bookMovements = new ArrayCollection();
     }
     
     /**
@@ -542,5 +554,73 @@ class User implements AdvancedUserInterface, \Serializable
     public function getChildSubjects()
     {
         return $this->childSubjects;
+    }
+
+    /**
+     * Add bookMovement
+     *
+     * @param \AppBundle\Entity\BookMovement $bookMovement
+     *
+     * @return User
+     */
+    public function addBookMovement(\AppBundle\Entity\BookMovement $bookMovement)
+    {
+        $this->bookMovements[] = $bookMovement;
+
+        return $this;
+    }
+
+    /**
+     * Remove bookMovement
+     *
+     * @param \AppBundle\Entity\BookMovement $bookMovement
+     */
+    public function removeBookMovement(\AppBundle\Entity\BookMovement $bookMovement)
+    {
+        $this->bookMovements->removeElement($bookMovement);
+    }
+
+    /**
+     * Get bookMovements
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBookMovements()
+    {
+        return $this->bookMovements;
+    }
+
+    /**
+     * Add document
+     *
+     * @param \AppBundle\Entity\Document $document
+     *
+     * @return User
+     */
+    public function addDocument(\AppBundle\Entity\Document $document)
+    {
+        $this->documents[] = $document;
+
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param \AppBundle\Entity\Document $document
+     */
+    public function removeDocument(\AppBundle\Entity\Document $document)
+    {
+        $this->documents->removeElement($document);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 }

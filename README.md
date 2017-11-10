@@ -1,4 +1,6 @@
 school
 ======
 
-A Symfony project created on October 4, 2017, 1:20 pm.
+A school management system for recording attendance, exams and more.
+
+Easy to use and greatly simplifies being a class teacher.

@@ -191,4 +191,38 @@ class ChildSubject
     {
         return $this->user;
     }
+
+    /**
+     * Add exam
+     *
+     * @param \AppBundle\Entity\Exam $exam
+     *
+     * @return ChildSubject
+     */
+    public function addExam(\AppBundle\Entity\Exam $exam)
+    {
+        $this->exams[] = $exam;
+
+        return $this;
+    }
+
+    /**
+     * Remove exam
+     *
+     * @param \AppBundle\Entity\Exam $exam
+     */
+    public function removeExam(\AppBundle\Entity\Exam $exam)
+    {
+        $this->exams->removeElement($exam);
+    }
+
+    /**
+     * Get exams
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExams()
+    {
+        return $this->exams;
+    }
 }

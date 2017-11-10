@@ -78,6 +78,11 @@ class Student
      */
     private $attendances;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BookMovement", mappedBy="owner")
+     */
+    private $bookMovements;
+
     public function __toString() {
         return $this->fName . " " . $this->lName;
     }
@@ -89,6 +94,7 @@ class Student
     {
         $this->attendances = new \Doctrine\Common\Collections\ArrayCollection();
         $this->exams = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bookMovements = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -335,5 +341,39 @@ class Student
     public function getExams()
     {
         return $this->exams;
+    }
+
+    /**
+     * Add bookMovement
+     *
+     * @param \AppBundle\Entity\BookMovement $bookMovement
+     *
+     * @return Student
+     */
+    public function addBookMovement(\AppBundle\Entity\BookMovement $bookMovement)
+    {
+        $this->bookMovements[] = $bookMovement;
+
+        return $this;
+    }
+
+    /**
+     * Remove bookMovement
+     *
+     * @param \AppBundle\Entity\BookMovement $bookMovement
+     */
+    public function removeBookMovement(\AppBundle\Entity\BookMovement $bookMovement)
+    {
+        $this->bookMovements->removeElement($bookMovement);
+    }
+
+    /**
+     * Get bookMovements
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBookMovements()
+    {
+        return $this->bookMovements;
     }
 }
