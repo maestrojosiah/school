@@ -46,7 +46,7 @@
                 			<td><span class="text-nowrap"><a href="{{ path('student_profile', { studentId: part[2].id } ) }}">{{ part[2] }}</a></span></td>
                             {% for subject in subjects %}
                             {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
-	                      		{% set key = part[2].id ~ subject.id %}
+	                      		{% set key = part[2].id ~ '.' ~ subject.id %}
 	                        	{% if exam[key] is defined %}
 		                          	{% set marks = exam[key].marks %}
 		                        {% else %}

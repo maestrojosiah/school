@@ -170,7 +170,7 @@ class ExamController extends Controller
                     } else {
                         $subjId = $exams[0]->getChildSubject()->getId();
                     }
-                    $key = $exams[0]->getStudent()->getId().$subjId;
+                    $key = $exams[0]->getStudent()->getId().'.'.$subjId;
                     $exam[$key] = $exams[0];
                 }
                 
@@ -535,7 +535,7 @@ class ExamController extends Controller
                     } else {
                         $subjId = $exams[0]->getChildSubject()->getId();
                     }
-                    $key = $exams[0]->getStudent()->getId().$subjId;
+                    $key = $exams[0]->getStudent()->getId().'.'.$subjId;
                     $exam[$key] = $exams[0];
                 }
                 
