@@ -21,6 +21,7 @@ class ExamCompanyController extends Controller
     	$em = $this->getDoctrine()->getManager();
 
         $examCompany = new ExamCompany();
+        $examCompany->setUser($user);
 
         $form = $this->createForm(ExamCompanyType::class, $examCompany);
 
@@ -64,7 +65,10 @@ class ExamCompanyController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $companies = $em->getRepository('AppBundle:ExamCompany')
-            ->findAll();
+            ->findBy(
+                array('user' => $user),
+                array('id' => 'ASC')
+            );
 
         $data['companies'] = $companies;
 

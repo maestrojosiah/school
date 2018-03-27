@@ -13,12 +13,28 @@
                     {{ message }}
                 </div>
             {% endfor %}
-
-            <div class="list-group row">
-                {% for class in app.user.classses %}
-                    <a href="{{ path('record_attendance', { 'class': class.id} ) }}" class="list-group-item list-group-item-action col-xs-9"> {{ class|upper }} </a><a href="{{ path('attendance_register', { 'classId': class.id, 'dateString': "now"|date("Y-m-d") } ) }}" class="col-xs-3 btn btn-circle btn-default"><i class="fa fa-eye"></i></a>
-                {% endfor %}  
-            </div>
+            <section class="panel">
+              <table class="table table-striped">
+                  <thead>
+                  <tr>
+                      <th>Class</th>
+                      <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    {% for class in app.user.classses %}
+                        <td><a href="{{ path('record_attendance', { 'class': class.id} ) }}" class="list-group-item list-group-item-action col-xs-9"> {{ class|upper }} </a></td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-default" href="{{ path('attendance_register', { 'classId': class.id, 'dateString': "now"|date("Y-m-d") } ) }}"><i class="fa fa-eye"></i></a></td>
+                            </div>
+                        </td>
+                    {% endfor %}                      
+                  </tr>
+                  </tbody>
+              </table>
+            </section>
 		{% endblock %}      
     {% endembed %}
 {% endblock %}

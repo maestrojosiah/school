@@ -110,6 +110,11 @@ class User implements AdvancedUserInterface, \Serializable
     private $childSubjects;
 
     /**
+     * @ORM\OneToMany(targetEntity="ExamCompany", mappedBy="user")
+     */
+    private $examCompanies;
+
+    /**
      * @ORM\OneToMany(targetEntity="BookMovement", mappedBy="user")
      */
     private $bookMovements;
@@ -124,6 +129,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->exams = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->childSubjects = new ArrayCollection();
+        $this->examCompanies = new ArrayCollection();
         $this->bookMovements = new ArrayCollection();
     }
     
@@ -622,5 +628,39 @@ class User implements AdvancedUserInterface, \Serializable
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    /**
+     * Add examCompany
+     *
+     * @param \AppBundle\Entity\ExamCompany $examCompany
+     *
+     * @return User
+     */
+    public function addExamCompany(\AppBundle\Entity\ExamCompany $examCompany)
+    {
+        $this->examCompanies[] = $examCompany;
+
+        return $this;
+    }
+
+    /**
+     * Remove examCompany
+     *
+     * @param \AppBundle\Entity\ExamCompany $examCompany
+     */
+    public function removeExamCompany(\AppBundle\Entity\ExamCompany $examCompany)
+    {
+        $this->examCompanies->removeElement($examCompany);
+    }
+
+    /**
+     * Get examCompanies
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamCompanies()
+    {
+        return $this->examCompanies;
     }
 }

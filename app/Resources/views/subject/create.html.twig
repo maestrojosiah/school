@@ -6,41 +6,50 @@
         {% endblock %}
         {% block charts %}
         {% endblock %}
-        {% block otherstuff_lg8 %}
+        {% block otherstuff_lg12 %}
+            {{ form_start(form, {'method': 'post'} ) }}
+            <div class="col-lg-6">
+                <section class="panel">
+                    <header class="panel-heading">
+                      {% if not form.vars.valid %}
+                        <div class="alert alert-warning">
+                        {{ form_errors(form) }}
+                        </div>   
+                      {% endif %} 
+                    </header>
+                    <div class="panel-body">
+                            <div class="form-group">
+                                {{ form_row(form.subject_title, {'attr': {'class': 'form-control' }}) }}
+                            </div>
+                            <div class="form-group out_of" style="display:none">
+                                <label for="out_of_1" id="out_of_1_label_label">First [Out Of]</label>
+                                <input class="form-control" type="text" name="out_of_1" id="out_of_1" placeholder="Out Of" />
+                            </div>
+                            <div class="form-group out_of" style="display:none">
+                                <label for="out_of_2" id="out_of_2_label">Second [Out Of]</label>
+                                <input class="form-control" type="text" name="out_of_2" id="out_of_2" placeholder="Out Of" />
+                            </div>
+                            <button type="button" id="save" class="btn btn-primary">Save</button>
+                            <a href="{{path('homepage')}}" class="btn btn-danger">DONE</a>
+                        {{ form_end(form) }}
 
-		{{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal' }} ) }}
-	              <div class="alert alert-warning" id="alert" style="display:none;">
-	              </div>
-				{% if not form.vars.valid %}
-	              <div class="alert alert-warning">
-	              {{ form_errors(form) }}
-	              </div>				
-          		{% endif %}
-			  <div class="form-group">
-			    <label for="subject_title" class="col-sm-4 control-label">Subject Title</label>
-			    <div class="col-sm-8">
-		    		{{ form_row(form.subject_title, {'attr': {'class': 'form-control', 'placeholder': 'Subject Title', 'id': 'subject_title' }}) }}
-			    </div>
-			  </div>
-			  <div class="form-group out_of" style="display:none">
-			    <label for="out_of_1" id="out_of_1_label" class="col-sm-4 control-label">First (Out Of)</label>
-			    <div class="col-sm-8">
-		    		<input class="form-control" type="text" name="out_of_1" id="out_of_1" placeholder="Out Of" />
-			    </div>
-			  </div>
-			  <div class="form-group out_of" style="display:none">
-			    <label for="out_of_2" id="out_of_2_label" class="col-sm-4 control-label">Second (Out Of)</label>
-			    <div class="col-sm-8">
-		    		<input class="form-control" type="text" name="out_of_2" id="out_of_2" placeholder="Out Of" />
-			    </div>
-			  </div>
-			  <div class="form-group">
-			    <label for="out_of_2" id="out_of_2_label" class="col-sm-4 control-label"></label>
-			    <div class="col-sm-8">
-		    		<button type="button" id="save" class="btn btn-info">Save</button>
-			    </div>
-			  </div>
-		{{ form_end(form) }}
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-6">
+                <section class="panel">
+                    <header class="panel-heading">
+                      <h4>Added Subjects</h4>
+                    </header>
+                    <div class="panel-body">
+                        <ol>
+                          {% for subject in data.subjects %}
+                            <li>{{subject}}</li>
+                          {% endfor %}
+                        </ol>
+                    </div>
+                </section>
+            </div>
 
 		{% endblock %}
 	{% endembed %}
@@ -48,9 +57,9 @@
 
 {% block javascripts %}
 
-      <script>
-        $(document).on('change', '#subject_subject_title', function(){
-        if ($(this).val().indexOf('|') > -1)
+    <script>
+    $(document).on('change', '#subject_subject_title', function(){
+    if ($(this).val().indexOf('|') > -1)
 		{	
 			var split = $(this).val().split("|");
           	var parent = split[0];
@@ -112,10 +121,12 @@
                 async: true,
                 success: function (data)
                 {
-				  $('#out_of_1').val("");
-				  $('#out_of_2').val("");                	
+        				  $('#out_of_1').val("");
+        				  $('#out_of_2').val("");                	
                   $('#alert').removeClass('alert-warning').addClass('alert-info');
                   $('#alert').show().html(data.parentName+" - The subject has been successfully saved. <a href=\"{{path('list_subjects')}}\">Go to subjects list</a>");
+                  location.reload();
+                },
                 },
                error: function () {
                   $('#alert').html("Something went wrong. Please call 0705285959 for assistance");

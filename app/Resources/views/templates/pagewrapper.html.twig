@@ -1,11 +1,11 @@
-<div id="page-wrapper">
+<!--main content start-->
+{% if app.request.attributes.get('_route') != 'login' %}    
+    <section id="main-content">
+    <section class="wrapper"> 
+{% endif %}
+             
     {% block title %}
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">{{ action_title }}</h1>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
+        <h4>{{action_title}}</h4>
     {% endblock %}
     <!-- /.row -->
     {% block toplinks %}
@@ -70,3 +70,7 @@
     </div>
 </div>
 <!-- /#page-wrapper -->
+{% if app.request.attributes.get('_route') != 'login' %}    
+    </section> 
+    </section>
+{% endif %}

@@ -33,6 +33,7 @@
         page-break-inside: avoid;
     }
 
+
     .text-danger{
         color:red;
     }
@@ -52,7 +53,7 @@
                         <th class="col-md-3 text-center">Name</th>
                         {% for subject in subjects %}
                             {% if subject.outOf < 100 and subject.outOf != 'children' %}{% set color = 'primary' %}{% else %}{% set color = 'danger' %}{% endif %}
-                            <th class="col-md-1 text-center text-{{color}}">{{ subject.subjectTitle }}</th>
+                            <th class="col-md-1 text-center text-{{color}}">{{ subject.subjectTitle|slice(0,3) }}</th>
                         {% endfor %}
                         <th class="col-md-1 text-info text-center text-danger">Totals</th>
                         <th class="col-md-1 text-info text-center text-primary">Position</th>
@@ -86,7 +87,7 @@
                             {% set sumTotalMarksSubject = sumTotalMarksSubject + totalMarksSubject[subject.id] %}
                             <td class="text-info text-center text-{{color}}"><strong>{{ rankSubj[subject.id][0] }}</strong></td>
                         {% endfor %}
-                        <td class="text-info text-center text-danger"><strong>{{ sumTotalMarksSubject }}</strong></td>
+                        <td class="text-info text-center text-danger"><strong>{{ totalMarks }}</strong></td>
                         <td class="text-info text-center"></td>
                     </tr>
                     <tr>
@@ -96,7 +97,7 @@
                         {% set meanScore = totalMarksSubject[subject.id] / students|length %}
                             <td class="text-center text-{{color}}"><strong>{{ meanScore|round(2) }}</strong></td>
                         {% endfor %}
-                        {% set totalMarksMean = sumTotalMarksSubject / students|length %}
+                        {% set totalMarksMean = totalMarks / students|length %}
                         <td class="text-info text-center text-danger"><strong>{{ totalMarksMean|round(2) }}</strong></td>
                         <td class="text-info text-center"></td>
                     </tr>

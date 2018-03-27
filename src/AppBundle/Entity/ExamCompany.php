@@ -29,6 +29,12 @@ class ExamCompany
     private $companyName;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="examCompanies")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $user;
+
+    /**
      * @ORM\OneToMany(targetEntity="Exam", mappedBy="examCompany")
      */
     private $exams;
@@ -107,5 +113,29 @@ class ExamCompany
     public function getExams()
     {
         return $this->exams;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return ExamCompany
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

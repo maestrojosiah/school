@@ -6,3 +6,21 @@
         {% endblock %}
     {% endembed %}
 {% endblock %}
+{% block javascripts %}
+
+   <script type="text/javascript">
+    $( "#examsButton" ).click(function() {
+      $("#examModal").modal('show');
+    });
+    $( "#classButton" ).click(function() {
+      $("#classModal").modal('show');
+    });
+    $( "#subjectButton" ).click(function() {
+      $("#subjectModal").modal('show');
+    });
+    $( "#studentButton" ).click(function() {
+      $("#studentModal").modal('show');
+    });
+  </script>
+
+{% endblock %}

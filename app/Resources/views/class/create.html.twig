@@ -6,39 +6,57 @@
         {% endblock %}
         {% block charts %}
         {% endblock %}
-        {% block otherstuff_lg8 %}
-
-		{{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal' }} ) }}
+        {% block otherstuff_lg12 %}
+		<div class="col-lg-6">
+          <section class="panel">
+              <header class="panel-heading">
 				{% if not form.vars.valid %}
 	              <div class="alert alert-warning">
 	              {{ form_errors(form) }}
 	              </div>				
           		{% endif %}
-			  <div class="form-group">
-			    <label for="class" class="col-sm-2 control-label">Class</label>
-			    <div class="col-sm-10">
-		    		{{ form_row(form.class_number, {'attr': {'class': 'form-control', 'placeholder': 'Class', 'id' : 'class' }}) }}
-			    </div>
-			  </div>
-{# 			  <div class="form-group">
-			    <label for="class_wing" class="col-sm-2 control-label">Class Wing</label>
-			    <div class="col-sm-10">
-		    		{{ form_row(form.class_wing, {'attr': {'class': 'form-control', 'placeholder': 'Class Wing', 'id' : 'class_wing' }}) }}
-			    </div>
-			  </div>
- #}			  <div class="form-group">
-			    <label for="class_teacher" class="col-sm-2 control-label">Class Teacher</label>
-			    <div class="col-sm-10">
-		    		{{ form_row(form.class_teacher, {'attr': {'class': 'form-control', 'placeholder': 'Class Teacher', 'id' : 'class_teacher' }}) }}
-			    </div>
-			  </div>
-			  <div class="form-group">
-			    <div class="col-sm-10">
-		    		{{ form_row(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
-                    {{ form_widget(form.saveAndAdd, {'attr': {'class': 'btn btn-info' }} ) }}
-			    </div>
-			  </div>
-		{{ form_end(form) }}
+              </header>
+              <div class="panel-body">
+                  {{ form_start(form, {'method': 'post'} ) }}
+                      <div class="form-group">
+                          <label for="class">Class:</label>
+                          {{ form_row(form.class_number, {'attr': {'class': 'form-control', 'placeholder': 'Class', 'id' : 'class' }}) }}
+                      </div>
+                      <div class="form-group">
+                          <label for="class_teacher">Class Teacher</label>
+                          {{ form_row(form.class_teacher, {'attr': {'class': 'form-control', 'placeholder': 'Class Teacher', 'id' : 'class_teacher' }}) }}
+                      </div>
+                      <div class="row">
+                      	<div class="col-lg-4">
+                      		{{ form_row(form.save, {'attr': {'class': 'btn btn-primary btn-block'}}) }}
+                      	</div>
+                      	<div class="col-lg-4">
+        			  		{{ form_widget(form.saveAndAdd, {'attr': {'class': 'btn btn-info btn-block' }} ) }}
+        			  	</div>
+                      	<div class="col-lg-4">
+        			  		<a href="{{path('homepage')}}" class="btn btn-danger btn-block" >DONE</a>
+        			  	</div>
+
+                  {{ form_end(form) }}
+
+              </div>
+          </section>
+      </div>		
+
+		<div class="col-lg-6">
+          <section class="panel">
+              <header class="panel-heading">
+				<h4>Added Classes</h4>
+              </header>
+              <div class="panel-body">
+                  <ol>
+					{% for class in data.classes %}
+						<li>{{class}}
+					{% endfor %}
+                  </ol>
+              </div>
+          </section>
+      </div>		
 
 		{% endblock %}
 	{% endembed %}

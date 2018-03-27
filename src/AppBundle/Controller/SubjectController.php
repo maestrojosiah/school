@@ -19,16 +19,18 @@ class SubjectController extends Controller
     public function createAction(Request $request)
     {
     	$data = [];
+        $em = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $data['user'] = $user;
 
-        $em = $this->getDoctrine()->getManager();
+        $subjects = $em->getRepository('AppBundle:Subject')
+            ->findBy(
+                array('user' => $user),
+                array('id' => 'ASC')
+            );
 
-        // $subjects = $em->getRepository('AppBundle:Subject')
-        // 	->findBy(
-        // 		array('user' => $user),
-        // 		array('id' => 'DESC')
-        // 	);
+        $data['subjects'] = $subjects;
+
 
         $subject = new Subject();
         $subject->setUser($user);
@@ -37,8 +39,6 @@ class SubjectController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
 
             $em->persist($subject);
             $em->flush();
@@ -58,7 +58,7 @@ class SubjectController extends Controller
 
 	
         // replace this example code with whatever you need
-        return $this->render('subject/create.html.twig',['form' => $form->createView()] );
+        return $this->render('subject/create.html.twig',['form' => $form->createView(), 'data'=>$data] );
 
     }
 
@@ -74,7 +74,10 @@ class SubjectController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $subjects = $em->getRepository('AppBundle:Subject')
-            ->findAll();
+            ->findBy(
+                array('user' => $user),
+                array('id' => 'ASC')
+            );
 
         $data['subjects'] = $subjects;
 

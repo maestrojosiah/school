@@ -19,14 +19,14 @@ class ClasssController extends Controller
     	$data = [];
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $data['user'] = $user;
-
         $em = $this->getDoctrine()->getManager();
 
-        // $classes = $em->getRepository('AppBundle:Classs')
-        // 	->findBy(
-        // 		array('user' => $user),
-        // 		array('id' => 'DESC')
-        // 	);
+        $classes = $em->getRepository('AppBundle:Classs')
+        	->findBy(
+        		array('user' => $user),
+        		array('id' => 'DESC')
+        	);
+        $data['classes'] = $classes;
 
         $classs = new Classs();
         $classs->setUser($user);
@@ -55,7 +55,7 @@ class ClasssController extends Controller
 
 	
         // replace this example code with whatever you need
-        return $this->render('class/create.html.twig',['form' => $form->createView()] );
+        return $this->render('class/create.html.twig',['form' => $form->createView(), 'data' => $data] );
 
 
     }

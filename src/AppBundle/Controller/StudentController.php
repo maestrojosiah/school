@@ -22,6 +22,13 @@ class StudentController extends Controller
         $data['user'] = $user;
 
         $em = $this->getDoctrine()->getManager();
+        $students = $em->getRepository('AppBundle:Student')
+            ->findBy(
+                array('user'=>$user),
+                array('id' => 'ASC')
+            );
+
+        $data['students'] = $students;
 
         //today, this year and this month in date format
         $today = date("Y-m-d");

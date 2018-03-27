@@ -27,7 +27,7 @@
                   | <strong>Exam company</strong>
                  <select class="form-inline" id="examCompany">
                       <option value="select_one" {% if examCompany == null %} selected {% endif %} disabled >Select Exam Company</option>
-                      {% for company in examCompanies %}
+                      {% for company in app.user.examCompanies %}
                         <option value="{{ company.id }}" {% if examCompany != null and examCompany.id == company.id %} selected {% endif %}>{{ company.companyName }}</option>
                       {% endfor %}
                   </select>
@@ -94,12 +94,12 @@
           if($('#examCompany').val() == null){
             $(this).val('');
             $('#examCompany').focus().addClass('text-danger');
-            $('#alert').removeClass('alert-info').addClass('alert-warning');
+            $('#alert').removeClass('alert-info').addClass('alert-danger');
             $('#alert').html("Please set the exam company before recording anything")
           } else if ($('#term').val() == "none"){
             $(this).val('');
             $('#term').focus().addClass('text-danger');
-            $('#alert').removeClass('alert-info').addClass('alert-warning');
+            $('#alert').removeClass('alert-info').addClass('alert-danger');
             $('#alert').html("Please select the term for the exams before recording anything")
           } else {
             var category = jQuery(this).attr("id");

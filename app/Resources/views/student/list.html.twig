@@ -31,9 +31,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav">
-                    <li><a href="{{ path('list_students') }}">All</a></li>
+                    <li><a style="text-decoration:underline;" href="{{ path('list_students') }}">All</a></li>
                     {% for class in app.user.classses %}
-                    <li><a href="{{ path('list_students_from_class', { 'classId': class.id } )}}">{{ class.classNumber }}</a></li>
+                    <li><a style="text-decoration:underline" href="{{ path('list_students_from_class', { 'classId': class.id } )}}">{{ class.classNumber }}</a></li>
                     {% endfor %}
                   </ul>
                 </div><!-- /.navbar-collapse -->

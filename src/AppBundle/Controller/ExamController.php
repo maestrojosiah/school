@@ -198,6 +198,17 @@ class ExamController extends Controller
         $rank = $this->rank($totalMarksStudent);
         $rankSubj = $this->rank($totalMarksSubject);
 
+        $totalMarksA = [];
+        foreach($subjectsForTotal as $key=>$subject){
+            $role = explode('_', $key)[0];
+            if($role == 'child'){
+                $marks = 0;
+            } else {
+                $marks = $em->getRepository('AppBundle:Exam')
+                    ->getTotalMarksForSubject($subject, $examCompany, $term, $class);
+            }
+            $totalMarksA[$subject->getId()] = $marks;
+        }
 
 
         $data['examCompanies'] = $examCompanies;
@@ -214,8 +225,8 @@ class ExamController extends Controller
         $data['rankSubj'] = $rankSubj;
         $data['totalMarksStudent'] = $totalMarksStudent;
         $data['totalMarksSubject'] = $totalMarksSubject;
-    	$data['totalMarks'] = array_sum($totalMarksStudent);
-
+    	//$data['totalMarks'] = array_sum($totalMarksStudent);
+        $data['totalMarks'] = array_sum($totalMarksA);
         return $this->render('exam/view.html.twig', $data );
 
     }
@@ -559,6 +570,18 @@ class ExamController extends Controller
             }
             $totalMarksSubject[$subject->getId()] = $marks;
         }
+        
+        $totalMarksA = [];
+        foreach($subjectsForTotal as $key=>$subject){
+            $role = explode('_', $key)[0];
+            if($role == 'child'){
+                $marks = 0;
+            } else {
+                $marks = $em->getRepository('AppBundle:Exam')
+                    ->getTotalMarksForSubject($subject, $examCompany, $term, $class);
+            }
+            $totalMarksA[$subject->getId()] = $marks;
+        }
 
         $rank = $this->rank($totalMarksStudent);
         $rankSubj = $this->rank($totalMarksSubject);
@@ -574,6 +597,7 @@ class ExamController extends Controller
         $data['rankSubj'] = $rankSubj;
         $data['totalMarksStudent'] = $totalMarksStudent;
         $data['totalMarksSubject'] = $totalMarksSubject;
+        $data['totalMarks'] = array_sum($totalMarksA);
 
         $appPath = $this->container->getParameter('kernel.root_dir');
 
@@ -582,7 +606,7 @@ class ExamController extends Controller
         $filename = sprintf("exam-%s.pdf", date('Ymd~his'));
 
         return new Response(
-            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, array('orientation'=>'Landscape')),
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, array('orientation'=>'Portrait')),
             200,
             [
                 'Content-Type'        => 'application/pdf',

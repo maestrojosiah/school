@@ -7,9 +7,8 @@
         {% block charts %}
         {% endblock %}
             {% block otherstuff_lg12 %}
-              {# {{ dump(data) }} #}
 
-            {{ form_start(form, {'method': 'post', 'attr': {'class': '' }} ) }}
+            {{ form_start(form, {'method': 'post'} ) }}
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -50,10 +49,12 @@
                                       {{ form_widget(form.gender, {'attr': {'class': 'form-control', 'id': 'gender' }} ) }}
                                     </div>
                                </div>
+                               <div class="col-lg-6">
                               {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary' }} ) }}
                               {{ form_widget(form.saveAndAdd, {'attr': {'class': 'btn btn-info' }} ) }}                               
-                                <!-- /.col-lg-6 (nested) -->
-              `             {{ form_end(form) }}
+                              <a href="{{path('homepage')}}" class="btn btn-danger">DONE</a>
+                              </div>
+                              {{ form_end(form) }}
                             </div>
                             <!-- /.row (nested) -->
                         </div>
@@ -62,6 +63,13 @@
                     <!-- /.panel -->
                 </div>
                 <!-- /.col-lg-12 -->
+                <div class="col-lg-12">
+                  <ol>
+                    {% for student in data.students %}
+                      <li>{{student}}</li>
+                    {% endfor %}
+                  </ol>
+                </div>
             </div>
             </div>
 

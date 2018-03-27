@@ -1,123 +1,212 @@
-<div class="row">
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-group fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{{ countStudents }}</div>
-                        <div>Students</div>
-                    </div>
-                </div>
+<!--overview start-->
+<div class="row state-overview">
+  <div class="col-lg-4">
+  <!--user profile info start-->
+  <section class="panel">
+      <div class="profile-widget profile-widget-info">
+          <div class="panel-body">
+            <div class="col-lg-4 col-sm-4 profile-widget-name">
+              <h4>John Smith</h4>               
+              <div class="follow-ava">
+                  <img src="img/profile-widget-avatar.jpg" alt="">
+              </div>
+              <h6>Administrator</h6>
             </div>
-            <a href="#" data-toggle="modal" data-target="#studentModal">
-                <div class="panel-footer">
-                    <span class="pull-left">Manage Students</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-green">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-tasks fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{{ countSubjects }}</div>
-                        <div>Subjects</div>
-                    </div>
-                </div>
+            <div class="col-lg-8 col-sm-8 follow-info">
+                <p>Welcome back John, Please check your pending work.</p>
+                <p>@johnsmith</p>
+                <h6>
+                    <span><i class="icon_clock_alt"></i>11:05 AM</span>
+                    <span><i class="icon_calendar"></i>25.10.13</span>
+                    <span><i class="icon_pin_alt"></i>NY</span>
+                </h6>
             </div>
-            <a href="#" data-toggle="modal" data-target="#subjectModal">
-                <div class="panel-footer">
-                    <span class="pull-left">Manage Subjects</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-building fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{{ countClasses }}</div>
-                        <div>Classes</div>
-                    </div>
-                </div>
+            <div class="weather-category twt-category">
+                      <ul>
+                          <li class="active">
+                              <h4>50</h4>
+                              <i class="icon_close_alt2"></i> Pending Task
+                          </li>
+                          <li>
+                              <h4>550</h4>
+                              <i class="icon_check_alt2"></i> Completed
+                          </li>
+                          <li>
+                              <h4>600</h4>
+                              <i class="icon_plus_alt2"></i> Total Task
+                          </li>
+                      </ul>
+                  </div>
+          </div>
+          <footer class="profile-widget-foot">
+            <div class="follow-task">
+                <span>
+                <a href="">
+                    <i class="icon_mail_alt tooltips" data-original-title="My Mail"></i>
+                    <span class="badge bg-important">4</span>
+                </a>
+                </span>
+                <span>
+                <a href="">
+                    <i class="icon_percent tooltips" data-original-title="My Profit"></i>                                                                       </a>
+                </span>
+                <span>
+                <a href="">
+                    <i class="icon_heart_alt tooltips" data-original-title="Favorits"></i>                                    
+                    <span class="badge bg-important">2</span>
+                </a>
+                </span>
+                <span>
+                <a href="">
+                    <i class="icon_cart_alt tooltips" data-original-title="Sell"></i>                                    
+                </a>
+                </span>
+                <span>
+                <a href="">
+                    <i class="icon_lightbulb_alt tooltips" data-original-title="Suggesation"></i>                                    
+                    <span class="badge bg-important">6</span>
+                </a>
+                </span>
+                <span>
+                <a href="">
+                    <i class="icon_piechart tooltips" data-original-title="Reports"></i>                                    
+                </a>
+                </span>
+                
             </div>
-            <a href="#" data-toggle="modal" data-target="#classModal">
-                <div class="panel-footer">
-                    <span class="pull-left">Manage Classes</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-red">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-file-text-o  fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{{ countExams|length }}</div>
-                        <div>Exams</div>
-                    </div>
-                </div>
-            </div>
-            <a href="#" data-toggle="modal" data-target="#examModal">
-                <div class="panel-footer">
-                    <span class="pull-left">Manage Exams</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
+          </footer>
+      </div>
+  </section>
+  <!--user profile info end-->
 </div>
+<!-- statics start -->
+<div class="state col-lg-8">
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+          <section id="examsButton" class="panel">
+              <div class="symbol">
+                  <i class="icon_drawer_alt"></i>
+              </div>
+              <div class="value">
+                  <h1>{{countExams|length}}</h1>
+                  <a href="#" data-toggle="modal" data-target="#examModal">Exams</a>
+              </div>
+          </section>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+          <section id="subjectButton" class="panel">
+              <div class="symbol">
+                  <i class="icon_briefcase"></i>
+              </div>
+              <div class="value">
+                  <h1>{{countSubjects}}</h1>
+                  <a href="#" data-toggle="modal" data-target="#subjectModal">Subjects</a>
+              </div>
+          </section>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+          <section id="classButton" class="panel">
+              <div class="symbol">
+                  <i class="icon_datareport_alt"></i>
+              </div>
+              <div class="value">
+                  <h1>{{countClasses}}</h1>
+                  <a href="#" data-toggle="modal" data-target="#classModal">Classes</a>
+              </div>
+          </section>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+          <section id="studentButton" class="panel">
+              <div class="symbol">
+                  <i class="icon_group"></i>
+              </div>
+              <div class="value">
+                  <h1>{{countStudents}}</h1>
+                  <a href="#studentModal" data-toggle="modal">Students</a>
+              </div>
+          </section>
+      </div>
+    </div>
 
-<div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="studentModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="studentModalLabel">Manage Students</h4>
+    <div class="row knob-charts">
+        <div class="col-lg-12">
+            <div class="panel">
+                <div class="panel-body">
+                      <ul class="summary-list">
+                          <li>
+                              <a href="javascript:;">
+                                  <input class="knob" data-readonly="true" data-width="80" data-height="80" data-displayPrevious=true  data-thickness=".1" value="75" data-fgColor="#007AFF" data-bgColor="#F7F7F7">
+                                  <p><i class="icon_currency"></i> Sell</p>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="javascript:;">
+                                  <input class="knob" data-readonly="true" data-width="80" data-height="80" data-displayPrevious=true  data-thickness=".1" value="25" data-fgColor="#34AADC" data-bgColor="#F7F7F7">
+                                  <p><i class="icon_cart_alt"></i> Purchase</p>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="javascript:;">
+                                  <input class="knob" data-readonly="true" data-width="80" data-height="80" data-displayPrevious=true  data-thickness=".1" value="85" data-fgColor="#FF2D55" data-bgColor="#F7F7F7">
+                                  <p><i class="icon_easel"></i> Bounce Rate</p>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="javascript:;">
+                                  <input class="knob" data-readonly="true" data-width="80" data-height="80" data-displayPrevious=true  data-thickness=".1" value="95" data-fgColor="#34AADC" data-bgColor="#F7F7F7">
+                                  <p><i class="icon_datareport"></i> New Visits</p>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="javascript:;">
+                                  <input class="knob" data-readonly="true" data-width="80" data-height="80" data-displayPrevious=true  data-thickness=".1" value="65" data-fgColor="#007AFF" data-bgColor="#F7F7F7">
+                                  <p><i class="icon_search"></i> Search Traffic</p>
+                              </a>
+                          </li>
+                      </ul>
+                  </div>                                
             </div>
-            <div class="modal-body text-center">
+        </div>                        
+    </div>
+</div>    
+<!-- statics end -->
+</div>
+<!--overview end-->
+
+
+
+
+
+
+
+<div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h4 class="modal-title">Manage Students</h4>
+          </div>
+          <div class="modal-body">
+
                 <div class="list-group">
-                  <a href="{{ path('add_student') }}" class="list-group-item list-group-item-action">Add Student </a>
-                  <a href="{{ path('list_students') }}" class="list-group-item list-group-item-action">List Students</a>
-                  <a href="{{ path('attendance_classes') }}" class="list-group-item list-group-item-action">Attendance</a>
-                  <a href="#" class="list-group-item list-group-item-action">Food</a>
+                  <a href="{{ path('add_student') }}" class="list-group-item">Add Student </a>
+                  <a href="{{ path('list_students') }}" class="list-group-item">List Students</a>
+                  <a href="{{ path('attendance_classes') }}" class="list-group-item">Attendance</a>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+
+          </div>
+          <div class="modal-footer">
+              <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+          </div>
+      </div>
+  </div>
 </div>
 
-<div class="modal fade" id="subjectModal" tabindex="-1" role="dialog" aria-labelledby="subjectModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<div class="modal fade" id="subjectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="subjectModalLabel">Manage Subjects</h4>
             </div>
             <div class="modal-body text-center">
@@ -126,20 +215,18 @@
                   <a href="{{ path('list_subjects') }}" class="list-group-item list-group-item-action">List Subjects</a>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+          <div class="modal-footer">
+              <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+          </div>
+      </div>
+  </div>
 </div>
 
-<div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="classModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="classModalLabel">Manage Classes</h4>
             </div>
             <div class="modal-body text-center">
@@ -148,20 +235,18 @@
                   <a href="{{ path('list_classes') }}" class="list-group-item list-group-item-action">List Classes</a>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+          <div class="modal-footer">
+              <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+          </div>
+      </div>
+  </div>
 </div>
 
-<div class="modal fade" id="examModal" tabindex="-1" role="dialog" aria-labelledby="examModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<div class="modal fade" id="examModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="examModalLabel">Manage Exams</h4>
             </div>
             <div class="modal-body text-center">
@@ -173,11 +258,9 @@
                 {% endif %}
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+          <div class="modal-footer">
+              <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+          </div>
+      </div>
+  </div>
 </div>

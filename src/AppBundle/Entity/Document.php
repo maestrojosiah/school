@@ -30,9 +30,7 @@ class Document
     private $filename;
     /**
      * @var string
-     * @Assert\Image(
-     *     maxSize = "15242880",
-     * )
+     *
      * @ORM\Column(name="file", type="string", length=325)
      */
     private $file;
